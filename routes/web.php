@@ -1,5 +1,11 @@
 <?php
 
+use App\Http\Controllers\{
+    CampaignController,
+    CategoryController,
+    DashboardController
+};
+use App\Models\Campaign;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +21,26 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+
+
+Route::group([
+    'middleware' => ['auth', 'role:admin,donatur']
+], function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('dashboard');
+
+    Route::group([
+        'middleware' => 'role:admin'
+    ], function () {
+        Route::resource('/category', CategoryController::class);
+        Route::resource('/campaign', CampaignController::class)->except('create', 'edit');
+    });
+
+    Route::group([
+        'middleware' => 'role:donatur'
+    ], function () {
+        // 
+    });
 });
