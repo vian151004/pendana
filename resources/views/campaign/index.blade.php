@@ -24,7 +24,7 @@
                     <th width="">Deskripsi</th>
                     <th width="">Tgl Publish </th>
                     <th width="">Status</th>
-                    <th width="">Relawan</th>
+                    <th width="">Author</th>
                     <th width="15%">
                         <i class="fas fa-cog"></i>
                     </th>
@@ -49,7 +49,22 @@
     let modal = '#modal-form';
     let table;
 
-    $('.table').DataTable();
+    table = $('.table').DataTable({
+        processing: true,
+        autoWidth: false,
+        ajax: {
+            url: '{{ route('campaign.data') }}'
+        },
+        columns: [
+            {data: 'DT_RowIndex', searchable: false, sortable: false},
+            {data: 'path_image', searchable: false, sortable: false},
+            {data: 'short_description'},
+            {data: 'publish_date', searchable: false},
+            {data: 'status', searchable: false, sortable: false},
+            {data: 'author', searchable: false},
+            {data: 'action', searchable: false, sortable: false},
+        ]
+    });
 
     function addForm(url, title = 'Tambah') {
         $(modal).modal('show');
@@ -65,9 +80,19 @@
                 $(modal).modal('show');
                 $(`${modal} .modal-title`).text(title);
                 $(`${modal} form`).attr('action', url);
+                $(`${modal} [name=_method]`).val('put');
 
                 resetForm(`${modal} form`); //untuk reset isi form setelah di close
                 loopForm(response.data);
+
+                let selectedCategories = [];
+                response.data.categories.forEach(item => {
+                    selectedCategories.push(item.id);
+                });
+
+                $('#categories')
+                    .val(selectedCategories)
+                    .trigger('change');
             })
             .fail(errors => {
                 alert('Tidak dapat menampilkan data');
@@ -126,12 +151,19 @@
     function loopForm(originalForm) {
         for (field in originalForm) {
             if ($(`[name=${field}]`).attr('type') != 'file') {
-                if ($(`[name=${field}]`).hasClass(summernote)) {
+                if ($(`[name=${field}]`).hasClass('summernote')) {
                     $(`[name=${field}]`).summernote('code', originalForm[field]);
+                } else if ($(`[name=${field}]`).attr('type') == 'radio') {
+                    $(`[name=${field}]`).filter(`[value="${originalForm[field]}"]`).prop(`checked`, true);
+                } else {
+                    $(`[name=${field}]`).val(originalForm[field]);
                 }
 
-                $(`[name=${field}]`).val(originalForm[field]);
                 $('select').trigger('change');
+            } else{
+                $(`.preview-${field}`)
+                    .attr('src', originalForm[field])
+                    .show();
             }
         }
     }

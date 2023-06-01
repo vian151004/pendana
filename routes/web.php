@@ -5,7 +5,6 @@ use App\Http\Controllers\{
     CategoryController,
     DashboardController
 };
-use App\Models\Campaign;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,6 +34,9 @@ Route::group([
         'middleware' => 'role:admin'
     ], function () {
         Route::resource('/category', CategoryController::class);
+
+        Route::get('/campaign/data', [CampaignController::class, 'data'])
+            ->name('campaign.data');
         Route::resource('/campaign', CampaignController::class)->except('create', 'edit');
     });
 

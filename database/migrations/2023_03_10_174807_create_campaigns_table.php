@@ -21,10 +21,12 @@ return new class extends Migration
                   ->unique(); 
             $table->string('short_description'); 
             $table->longText('body'); 
-            $table->integer('view_count'); 
+            $table->integer('view_count')
+                  ->default(0); 
             $table->enum('status', ['public', 'archived', 'pending'])
                   ->default('pending'); 
-            $table->integer('nominal'); 
+            $table->integer('nominal')
+                  ->default(0); 
             $table->integer('goal'); 
             $table->dateTime('end_date'); 
             $table->text('note')
