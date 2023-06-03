@@ -52,6 +52,7 @@
                 <select name="status" id="status" class="custom-select">
                     <option disabled selected>Pilih salah satu!</option>
                     <option value="publish">Publish</option>
+                    <option value="pending">Pending</option>
                     <option value="archived">Diarsipkan</option>
                 </select>
             </div>
