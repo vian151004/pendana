@@ -120,7 +120,7 @@
             @enderror
         </div>
         <div class="form-group">
-            <label for="about">Alamat</label>
+            <label for="about">Tentang</label>
             <textarea class="form-control @error('about') is-invalid @enderror" name="about" id="about" 
                 value="">{{ old('about') ?? auth()->user()->about }}</textarea>
             @error('about')
