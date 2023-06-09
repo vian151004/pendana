@@ -3,7 +3,8 @@
 use App\Http\Controllers\{
     CampaignController,
     CategoryController,
-    DashboardController
+    DashboardController,
+    SettingController
 };
 use Illuminate\Support\Facades\Route;
 
@@ -40,6 +41,11 @@ Route::group([
         Route::get('/campaign/detail/{id}', [CampaignController::class, 'detail'])
             ->name('campaign.detail');
         Route::resource('/campaign', CampaignController::class)->except('create', 'edit');
+
+        Route::get('/setting', [SettingController::class, 'index'])
+            ->name('setting.index');
+        Route::put('/setting/{setting}', [SettingController::class, 'update'])
+            ->name('setting.update');
     });
 
     Route::group([
