@@ -20,29 +20,40 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
      */
     public function update(User $user, array $input)
     {
-        $validated = Validator::make($input, [
+        $rules =  [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'path_image' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
-        ]);
+        ];
+
+        if ($input['pills'] == 'bank') {
+            $rules = [
+                'bank_id' => 'required|exists:bank,id|unique:bank_user,bank_id',
+                'account' => 'required|unique:bank_user,account',  
+                'name' => 'required', 
+            ];
+        }
+
+        $validated = Validator::make($input, $rules);
         
         if ($validated->fails()) {
-            return back()->withErrors($validated->errors());
+            return back()
+                ->withInput()
+                ->withErrors($validated->errors());
         }
 
         if (isset($input['path_image'])) {
             $input['path_image'] = upload('user', $input['path_image'], 'user');
         }
 
-    //     if (isset($input['path_image'])) {
-    //         if (Storage::disk('public')->exists($user->path_image)) {
-    //             Storage::disk('public')->delete($user->path_image);
-    //         }
-
-    //         $input['path_image'] = upload('user', $input['path_image'], 'user');
-    //      }
-
         $user->update($input);
+
+        if ($input['pills'] == 'bank') {
+            $user->bank_user()->attach($input['bank_id'], [
+                'account' => $input['account'],
+                'name' => $input['name']
+            ]);
+        }
 
         session()->flash('message', 'Profil berhasil diperbarui');
         session()->flash('success', true);

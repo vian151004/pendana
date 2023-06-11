@@ -1,4 +1,4 @@
-<form action="{{ route('setting.update', $setting->id) }}?pills=bank" method="POST">
+<form action="{{ route('user-profile-information.update') }}?pills=bank" method="POST">
     @csrf
     @method('PUT')
 
@@ -66,14 +66,14 @@
             </th>
         </x-slot>
 
-        @foreach ($setting->bank_setting as $k => $v)
+        @foreach ($user->bank_user as $k => $v)
             <tr>
                 <td>{{ $k+1 }}</td>
                 <td>{{ $v->pivot->name }}</td>
                 <td>{{ $v->pivot->account }}</td>
                 <td>{{ $v->name }}</td>
                 <td>
-                    <form action="{{ route('setting.bank.destroy', ['setting' => $setting->id, 'id' => $v->id]) }}" method="POST">
+                    <form action="{{ route('profile.bank.destroy', $v->id) }}" method="POST">
                         @csrf
                         @method('DELETE')
 
