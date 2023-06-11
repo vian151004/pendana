@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             RoleTableSeeder::class,
             UserTableSeeder::class,
             SettingTableSeeder::class,
+            BankTableSeeder::class
         ]);
     }
 }
