@@ -34,23 +34,18 @@
             background: rgba(255, 255, 255, .5);
             transition: .5s;
         }
-
         .bg-dark-50 {
             background: rgba(0, 0, 0, .5);
         }
-
         .bg-light {
             background: #f4f6f9;
         }
-
         .text-white-80 {
             color: rgba(255, 255, 255, .8);
         }
-
         .text-lg {
             font-size: 1.25rem;
         }
-
         a.text-white-80:hover {
             color: rgba(255, 255, 255, .5);
         }
@@ -59,54 +54,45 @@
         .header {
             font-size: 14px;
         }
-
         .navbar-brand img {
             width: 170px;
             position: absolute;
             top: 4px;
         }
-
         #navbar1 .nav-link {
             padding: .35rem 1.25rem;
             border-radius: 25px;
             color: #333333;
             transition: .3s;
         }
-
         #navbar1 .nav-link:hover,
         #navbar1 .nav-link:focus,
         #navbar1 .nav-link.active {
             background: var(--primary);
             color: var(--white);
         }
-
         #navbar1 .dropdown-menu {
             padding: 0;
             border-radius: 0;
             border: 0;
             margin-top: 8px;
         }
-
         #navbar1 .dropdown-item {
             transition: .3s;
         }
-
         #navbar1 .dropdown-item:hover,
         #navbar1 .dropdown-item:focus {
             background: var(--primary);
             color: var(--white);
         }
-
         .navbar-toggler {
             border: 0;
             background: transparent !important;
         }
-
         .navbar-toggler:focus {
             outline: 0;
             background: transparent !important;
         }
-
         .navbar-toggler .icon-bar {
             background-color: rgba(0, 0, 0, .7);
             transform: rotate(0deg) translate(0px, 0px);
@@ -116,41 +102,33 @@
             height: 2px;
             border-radius: 1px;
         }
-
         .navbar-toggler .icon-bar+.icon-bar {
             margin-top: 4px;
         }
-
         .icon-bar:nth-child(2) {
             width: 16px;
             transition: ease all .2s;
         }
-
         .navbar-toggler:hover>.icon-bar:nth-child(2) {
             width: 22px;
             transition: ease all .2s;
         }
-
         .navbar-toggler:active>.icon-bar:nth-child(2) {
             width: 22px;
             transition: ease all .2s;
         }
-        
         .navbar-toggler:not(.collapsed):not(.first-load) .icon-bar:nth-child(1) {
             transform: rotate(45deg) translate(4px, 5px);
             transition: ease all .2s;
         }
-
         .navbar-toggler:not(.collapsed):not(.first-load) .icon-bar:nth-child(2) {
             opacity: 0;
             transition: ease all .2s;
         }
-
         .navbar-toggler:not(.collapsed):not(.first-load) .icon-bar:nth-child(3) {
             transform: rotate(-45deg) translate(4px, -4px);
             transition: ease all .2s;
         }
-
         @media (max-width: 992px) {
             .header .social {
                 text-align: center;
@@ -169,13 +147,11 @@
                 text-align: center;
             }
         }
-
         @media (max-width: 768px) {
             #navbar1 .nav-link:first-child:not(.dropdown-toggle) {
                 display: none;
             }
         }
-
         @media (max-width: 575.98px) {
             #navbar1 .nav-link {
                 border-radius: 0;
@@ -200,6 +176,29 @@
             }
         }
 
+        /* Banner */
+        .banner {
+            min-height: 280px;
+            display: flex;
+            align-items: flex-end;
+            padding-bottom: 10px;
+            position: relative;
+        }
+        .banner.bg-pendana {
+            background-image: url('{{ asset("/storage/bgcharity2.png") }}');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: bottom;
+        }
+        .banner.bg-pendana h2 {
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, .8);
+        }
+        @media (max-width: 575.98px) {
+            .banner.bg-pendana {
+                background-size: cover;
+                background-position: left;
+            }
+        }
     </style>
 
     @stack('css')
@@ -243,7 +242,7 @@
     {{-- Navbar --}}
     <nav class="navbar navbar-expand-sm sticky-top navbar-light bg-white border-bottom" style="top: -1px;">
         <div class="container">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="{{ url('/') }}">
                 <img src="{{ asset('/storage/logo.png') }}" alt="">
             </a>
             <button class="navbar-toggler first-load" type="button" data-toggle="collapse" data-target="#navbar1"
@@ -256,8 +255,8 @@
 
             <div class="collapse navbar-collapse" id="navbar1">
                 <ul class="navbar-nav ml-auto">
-                    <a class="nav-link active" href="#">Home</a>
-                    <a class="nav-link" href="#">Kontak</a>
+                    <a class="nav-link @if(request()->is('/')) active @endif" href="{{ url('/') }}">Home</a>
+                    <a class="nav-link @if(request()->is('contact')) active @endif" href="{{ url('/contact') }}">Kontak</a>
                     <a class="nav-link" href="#">Tentang Kami</a>
                     <div class="dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
