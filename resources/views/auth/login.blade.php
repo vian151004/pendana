@@ -23,7 +23,7 @@
 
                                 <div class="form-group mb-3">
                                     <label for="email">Email</label>
-                                    <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email">
+                                    <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}">
                                     @error('email')
                                         <span class="invalid-feedback">
                                             {{ $message }}
