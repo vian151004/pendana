@@ -205,7 +205,7 @@
 </head>
 <body class="bg-light">
     {{-- Header --}}
-    <div class="header bg-primary text-whiye py-2">
+    <div class="header bg-primary text-white py-2">
         <div class="container">
             <div class="row d-flex align-items-center">
                  {{-- social --}}
