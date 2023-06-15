@@ -81,7 +81,7 @@
                             </p>
                         </div>
                         <div class="card-footer bg-light p-2">
-                            <a href="" class="btn btn-primary d-block rounded">
+                            <a href="{{ url('/donation/1/') }}" class="btn btn-primary d-block rounded">
                                 <i class="fas fa-donate mr-2"></i>
                                 Donasi Sekarang
                             </a>
