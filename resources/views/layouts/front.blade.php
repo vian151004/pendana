@@ -22,6 +22,8 @@
     <!-- Fontawesome -->
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" 
         crossorigin="anonymous"/>
+
+    @stack('css_vendor')
         
     <style>
         body {
@@ -330,10 +332,26 @@
         integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous">
     </script>
 
+    @stack('scripts_vendor')
+
     <script>
         $('.navbar-toggler').on('click', function () {
             $(this).removeClass('first-load');
         })
+
+        $('.custom-file-input').on('change', function () {
+            let filename = $(this).val().split('\\').pop();
+            $(this)
+                .next('.custom-file-label')
+                .addClass('selected')
+                .html(filename);
+        });
+
+        function preview(target, image) {
+            $(target)
+                .attr('src', window.URL.createObjectURL(image))
+                .show();
+        }
     </script>
 
     @stack('scripts')

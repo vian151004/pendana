@@ -15,5 +15,10 @@
         closeOnSelect: true,
         allowClear: true,
     });
+
+    $('.select2-search__field').css('width', '100%');
+    $('.select2-container--bootestrap4 .select2-selection--multiple .select2-search__field')
+        .css('margin-left', '.3rem')
+        .css('margin-top', '.35rem');
 </script>
 @endpush

@@ -115,7 +115,7 @@
             <div class="col-lg-12 text-center">
                 <h2 class="fa-3x mb-4">DANA TERSALURKAN</h2>
                 <h3 class="font-weight-normal mb-3">
-                    Jika anda dapat bergaung dengan kami sekarang, <br>
+                    Jika Anda dapat bergaung dengan kami sekarang, <br>
                     maka akan banyak yang terbantu
                 </h3>
             </div>
