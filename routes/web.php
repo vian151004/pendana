@@ -4,6 +4,7 @@ use App\Http\Controllers\{
     CampaignController,
     CategoryController,
     DashboardController,
+    FrontController,
     SettingController,
     UserProfileInformationController
 };
@@ -20,30 +21,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('front.welcome');
-});
-Route::get('/contact', function () {
-    return view('front.contact');
-});
-Route::get('/about', function () {
-    return view('front.about');
-});
-Route::get('/donation', function () {
-    return view('front.donation.index');
-});
-Route::get('/donation/1', function () {
-    return view('front.donation.show');
-});
-Route::get('/donation/1/create', function () {
-    return view('front.donation.create');
-});
-Route::get('/donation/1/payment', function () {
-    return view('front.donation.payment');
-});
-Route::get('/donation/1/payment-confirmation', function () {
-    return view('front.donation.payment_confirmation');
-});
+Route::get('/', [FrontController::class, 'index']);
+Route::get('/contact', [FrontController::class, 'contact']);
+Route::post('/contact', [FrontController::class, 'storeContact']);
+Route::get('/about', [FrontController::class, 'about']);
+Route::get('/donation', [FrontController::class, 'donation']);
+Route::get('/donation/{id}', [FrontController::class, 'donationDetail']); //pakai camel case atau tanpa _
+Route::get('/donation/{id}/create', [FrontController::class, 'donationCreate']);
+Route::get('/donation/{id}/payment', [FrontController::class, 'donationPayment']);
+Route::get('/donation/{id}/payment-confirmation', [FrontController::class, 'donationPaymentConfirmation']);
+Route::post('/subscriber', [FrontController::class, 'subscriberStore']);
 
 Route::group([
     'middleware' => ['auth', 'role:admin,donatur']

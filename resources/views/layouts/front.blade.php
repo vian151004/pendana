@@ -9,10 +9,9 @@
 
     <link rel="icon" href="{{ asset('/storage/favicon.png') }}" type="image/*">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
-        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ asset('/AdminLTE/dist/css/adminlte.min.css ') }}">
+    
      <!-- Google Fonts -->   
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -212,30 +211,30 @@
             <div class="row d-flex align-items-center">
                  {{-- social --}}
                  <div class="col-lg-3 social">
-                    <a href="" class="text-white"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="" class="text-white ml-3"><i class="fab fa-twitter"></i></a>
-                    <a href="" class="text-white ml-3"><i class="fab fa-facebook-f"></i></a>
-                    <a href="" class="text-white ml-3"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="{{ $setting->instagram_link }}" target="_blank" class="text-white"><i class="fab fa-instagram"></i></a>
+                    <a href="{{ $setting->twitter_link }}" target="_blank" class="text-white ml-3"><i class="fab fa-twitter"></i></a>
+                    <a href="{{ $setting->facebook_link }}" target="_blank" class="text-white ml-3"><i class="fab fa-facebook-f"></i></a>
+                    <a href="{{ $setting->google_plus_link }}" target="_blank" class="text-white ml-3"><i class="fab fa-google-plus-g"></i></a>
                  </div>
                  {{-- info --}}
                  <div class="col-lg-7 office-info text-center">
                     <a href="" class="text-white text-decoration-none">
                         <i class="fas fa-phone-alt"></i>
-                        <span class="ml-1">0878-3082-6172</span>
+                        <span class="ml-1">{{ $setting->phone }}</span>
                     </a>
                     <a href="" class="ml-3 text-white text-decoration-none">
                         <i class="far fa-clock"></i>
-                        <span class="ml-1">Senin - Jum'at, 08:00 s/d 16:00</span>
+                        <span class="ml-1">{{ $setting->work_hours }}</span>
                     </a>
                     <a href="" class="ml-3 text-white text-decoration-none">
                         <i class="fas fa-envelope"></i>
-                        <span class="ml-1">support@gmail.com</span>
+                        <span class="ml-1">{{ $setting->email }}</span>
                     </a>
                  </div>
                  {{-- button --}}
                  <div class="col-lg-2 action" style="white-space: nowrap;">
-                    <a href="{{ url('/donation') }}" class="btn btn-sm btn-light py-0 rounded-0">Donasi</a>
-                    <a href="" class="btn btn-sm btn-light py-0 rounded-0">Galang Dana</a>
+                    <a href="{{ url('/donation') }}" class="btn btn-sm btn-light py-0 rounded-1">Donasi</a>
+                    <a href="{{ url('/campaign') }}" class="btn btn-sm btn-light py-0 rounded-1">Galang Dana</a>
                  </div>
             </div>
         </div>    
@@ -276,7 +275,7 @@
     </nav>
 
     {{-- Content --}}
-    @yield('content')
+    @yield('content') {{-- ke bagian welcome.blade.php --}}
     
     {{-- Footer --}}
     <div class="footer bg-dark">
@@ -287,35 +286,36 @@
                         <img src="{{ asset('/storage/logo2.png') }}" alt="" style="width: 170px;">
                     </div>
                     <p>
-                        Jl. Ungaran Raya <br>
-                        Kab. Semarang, Jawa Tengah
+                        {{ $setting->address }} <br>
+                        {{ $setting->city }}, {{ $setting->province }}
                     </p>
-                    <p class="mb-1"><i class="fas fa-phone-alt mr2"></i>0878-3082-6172</p>
-                    <p class="mb-1"><i class="fas fa-phone-alt mr2"></i>support@gmail.com</p>
-                    <p class="mb-1"><i class="fas fa-phone-alt mr2"></i>www.pendana.com</p>
+                    <p class="mb-1"><i class="fas fa-phone-alt mr2"></i>{{ $setting->phone }}</p>
+                    <p class="mb-1"><i class="fas fa-phone-alt mr2"></i>{{ $setting->email }}</p>
+                    <p class="mb-1"><i class="fas fa-phone-alt mr2"></i>{{ $setting->company_name }}</p>
                     
                 </div>
                 <div class="col-lg-3 text-white-80">
                     <h5 class="mb-lg-4 mb-2">Mari Berbagi</h5>
                     <p class="mb-lg-3 mb-1">
-                        <a href="" class="text-white-80 text-decoration-none">Galang Dana</a> <br>
+                        <a href="{{ url('/campaign') }}" class="text-white-80 text-decoration-none">Galang Dana</a> <br>
                         <small class="text-muted">{{ tanggal_indonesia(now()) }}</small>
                     </p>
                     <p class="mb-lg-3 mb-1">
-                        <a href="" class="text-white-80 text-decoration-none">Donasi</a> <br>
+                        <a href="{{ url('/donation') }}" class="text-white-80 text-decoration-none">Donasi</a> <br>
                         <small class="text-muted">{{ tanggal_indonesia(now()) }}</small>
                     </p>
                 </div>
                 <div class="col-lg-3 text-white-80">
                     <h5 class="mb-lg-4 mb-2">Bantuan</h5>
-                    <p class="mb-lg-3 mb-1"><a href="" class="text-white-80 text-decoration-none">Tentang Kami</a></p>
-                    <p class="mb-lg-3 mb-1"><a href="" class="text-white-80 text-decoration-none">Syarat dan Ketentuan</a></p>
-                    <p class="mb-lg-3 mb-1"><a href="" class="text-white-80 text-decoration-none">Kebijakan dan Privasi</a></p>
+                    <p class="mb-lg-3 mb-1"><a href="{{ url('/about') }}" class="text-white-80 text-decoration-none">Tentang Kami</a></p>
+                    <p class="mb-lg-3 mb-1"><a href="#" class="text-white-80 text-decoration-none">Syarat dan Ketentuan</a></p>
+                    <p class="mb-lg-3 mb-1"><a href="#" class="text-white-80 text-decoration-none">Kebijakan dan Privasi</a></p>
                 </div>
                 <div class="col-lg-3 text-white-80">
                     <h5 class="mb-lg-4 mb-2">Mari Berbagi</h5>
-                    <form action="" class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Masukkan Email">
+                    <form action="{{ url('/subscriber') }}" method="POST" class="input-group mb-3">
+                        <input type="text" name="email" class="form-control" placeholder="Masukkan Email" value="{{ old('email') }}">
+                        @csrf
                         <div class="input-group-append">
                             <button class="btn btn-primary px-3"><i class="fas fa-paper-plane"></i></button>
                         </div>
@@ -334,6 +334,9 @@
 
     @stack('scripts_vendor')
 
+    <!-- AdminLTE App -->
+    <script src="{{ asset('/AdminLTE/dist/js/adminlte.js') }}"></script>
+
     <script>
         $('.navbar-toggler').on('click', function () {
             $(this).removeClass('first-load');
@@ -342,7 +345,7 @@
         $('.custom-file-input').on('change', function () {
             let filename = $(this).val().split('\\').pop();
             $(this)
-                .next('.custom-file-label')
+                .next('.custom-file-label') 
                 .addClass('selected')
                 .html(filename);
         });

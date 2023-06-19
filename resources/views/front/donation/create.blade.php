@@ -58,7 +58,7 @@
                     </div>
                 </div>
                 <div class="form-group mt-3">
-                    <a href="{{ url('/donation/1/payment') }}" class="btn btn-primary btn-block">Lanjutkan Pembayaran</a>
+                    <a href="" class="btn btn-primary btn-block">Lanjutkan Pembayaran</a>
                 </div>
             </form>
         </div>

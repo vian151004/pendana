@@ -95,7 +95,7 @@
                 </div>
 
                 <div class="donasi mt-2 mb-4">
-                    <a href="{{ url('/donation/1/create') }}" class="btn btn-primary btn-lg btn-block">Donasi Sekarang</a>
+                    <a href="" class="btn btn-primary btn-lg btn-block">Donasi Sekarang</a>
                 </div>
 
                 <h4 class="font-weight-bold">Donatur (3)</h4>

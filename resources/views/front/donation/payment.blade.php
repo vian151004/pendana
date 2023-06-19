@@ -49,7 +49,7 @@
             </p>
            
             <div class="text-center mt-3 mt-lg-4">
-                <a href="{{ url('/donation/1/payment-confirmation') }}" class="btn btn-primary btn-lg">Konfirmasi Pembayaran</a>
+                <a href="" class="btn btn-primary btn-lg">Konfirmasi Pembayaran</a>
             </div>
 
             <div class="informasi d-flex justify-content-center align-items-center mt-3 mt-lg-4">
