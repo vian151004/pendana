@@ -123,7 +123,7 @@
             @foreach ($campaign as $v)  
             <div class="col-lg-4 col-md-6">
                 <div class="card mt-4">
-                    <div class="height:200px; overflow: hidden;"> {{-- jika foto terlalu leabr ditambah overflow: hidden; --}}
+                    <div class="rounded-top" style="height:250px; overflow: hidden;"> {{-- jika foto terlalu leabr ditambah overflow: hidden; --}}
                         @if ( asset('storage'. ($v->path_image)) )
                         <img src="{{ asset('storage'.( $v->path_image)) }}" class="card-img-top" 
                             alt="...">
@@ -136,7 +136,7 @@
                             class="card-img-top" alt="...">
                         @endif
                     </div>
-                    <div class="card-body p-2">
+                    <div class="card-body p-2 rounded">
                         <div class="d-flex justify-content-between text-dark">
                             <p class="mb-0">Terkumpul: <strong>{{ format_uang($v->nominal) }}</strong></p>
                             <p class="mb-0">Goal: <strong>{{ format_uang($v->goal) }}</strong></p>

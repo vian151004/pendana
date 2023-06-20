@@ -27,9 +27,13 @@ Route::post('/contact', [FrontController::class, 'storeContact']);
 Route::get('/about', [FrontController::class, 'about']);
 Route::get('/donation', [FrontController::class, 'donation']);
 Route::get('/donation/{id}', [FrontController::class, 'donationDetail']); //pakai camel case atau tanpa _
-Route::get('/donation/{id}/create', [FrontController::class, 'donationCreate']);
-Route::get('/donation/{id}/payment', [FrontController::class, 'donationPayment']);
-Route::get('/donation/{id}/payment-confirmation', [FrontController::class, 'donationPaymentConfirmation']);
+Route::group([
+    'middleware' => ['auth', 'role:admin,donatur']
+], function () {
+    Route::get('/donation/{id}/create', [FrontController::class, 'donationCreate']);
+    Route::get('/donation/{id}/payment', [FrontController::class, 'donationPayment']);
+    Route::get('/donation/{id}/payment-confirmation', [FrontController::class, 'donationPaymentConfirmation']);
+});
 Route::post('/subscriber', [FrontController::class, 'subscriberStore']);
 
 Route::group([
