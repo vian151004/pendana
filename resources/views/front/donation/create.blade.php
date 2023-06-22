@@ -13,7 +13,7 @@
                     <div class="card-body d-flex">
                         <div class="thumbnail rounded w-25" style="overflow: hidden;">
                             @if ( asset('storage'. ($campaign->path_image)) )
-                            <img src="{{ url('storage'. ($campaign->path_image)) }}" class="w-100" alt="...">
+                            <img src="{{ asset('storage'. ($campaign->path_image)) }}" class="w-100" alt="...">
                             @else
                             <img src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22286%22%20height%3D%22180%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.
                                 org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20286%20180%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_
@@ -36,7 +36,8 @@
                         <div class="bg-light rounded d-flex align-items-center p-3">
                             <h1 class="font-weight-bold w-25">Rp.</h1>
                             <div class="form-group w-75">
-                                <input type="number" class="form-control @error('nominal') is-invalid @enderror" name="nominal" placeholder="Masukkan nominal donasi" value="0">
+                                <input type="number" class="form-control @error('nominal') is-invalid @enderror" 
+                                    name="nominal" placeholder="Masukkan nominal donasi" value="{{ old('nominal') ?? 0 }}">
                                 @error('nominal')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -55,7 +56,7 @@
                             <select name="user_id" id="user_id" class="form-control @error('user_id') is-invalid @enderror select2">
                                 <option disabled selected>Pilih salah satu</option>
                                 @foreach ($user as $v)
-                                    <option value="{{ $v->id }}" data-phone="{{ $v->phone }}">{{ $v->name }}</option>
+                                    <option value="{{ $v->id }}" data-phone="{{ $v->phone }}" {{ old('user_id') == $v->id ? 'selected' : '' }}>{{ $v->name }}</option>
                                 @endforeach
                             </select>
                             @error('user_id')
@@ -76,12 +77,15 @@
 
                         <div class="form-group">
                             <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="anonim" name="anonim" value="1"> {{-- kalau di checklist, berarti value ny 1 --}}
+                                <input type="checkbox" class="custom-control-input" id="anonim" name="anonim" 
+                                    value="1" {{ old('anonim') == 1 ? 'checked' : '' }}> {{-- kalau di checklist, berarti value ny 1 --}}
                                 <label class="custom-control-label" for="anonim">Sembunyikan nama saya (Anonim)</label>
                             </div>
                         </div>
                         <div class="form-group">
-                            <textarea name="support" id="support" rows="4" class="form-control" placeholder="Tulis dukungan atau doa untuk penggalangan dana ini. Contoh:semoga cepet sembuh, ya!!!"></textarea>
+                            <textarea name="support" id="support" rows="4" class="form-control" placeholder="Tulis dukungan atau doa untuk penggalangan dana ini. Contoh:semoga cepet sembuh, ya!!!">
+                                {{ old('support') }}
+                            </textarea>
                         </div>
                     </div>
                 </div>
