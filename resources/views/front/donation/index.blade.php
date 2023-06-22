@@ -105,7 +105,8 @@
         </div>
     </div>
 
-    {{-- <div class="paginasi pb-5">
+    {{--  --}} 
+    <div class="paginasi pb-5">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 d-flex justify-content-center">
@@ -113,7 +114,7 @@
                 </div>
             </div>
         </div>
-    </div> --}} masih error cuk
+    </div>
 </div>
 @endsection
 

@@ -1,6 +1,6 @@
 @extends('layouts.front')
 
-@section('title', 'DARURAT! Peduli Korban Gempa Banten')
+@section('title', $campaign->user->name)
 
 @push('css')
     <style>
@@ -22,25 +22,19 @@
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-10">
-           <h5 class="text-center">Terimakasih Vian</h5>
-            <div class="detail d-flex justify-content-between align-items-center text-center mt-3 mt-lg-4">
-                <p>ID Transkasi #008812</p>
-                <p>Total Tagihan <strong>Rp. {{ format_uang(100000) }}</strong></p>
+           <h5 class="text-center">Terimakasih {{ $campaign->user->name }}</h5>
+            <div class="detail d-flex justify-content-around align-items-center text-center mt-3 mt-lg-4">
+                <p>ID Transkasi #{{ $donation->order_number }}</p>
+                <p>Total Tagihan <strong>Rp. {{ format_uang($donation->nominal) }}</strong></p>
             </div>
 
             <div class="row justify-content-between mt-3 mt-lg-4">
-                <div class="col-lg-3 col-md-4 text-center">
-                    <img src="{{ asset('/storage/bank/bri.png') }}" alt="" class="w-100">
-                    <p class="mt-3 text-muted">0009092983289323</p>
-                </div>
-                <div class="col-lg-3 col-md-4 text-center">
-                    <img src="{{ asset('/storage/bank/bni.png') }}" alt="" class="w-100">
-                    <p class="mt-3 text-muted">0009092983289323</p>
-                </div>
-                <div class="col-lg-3 col-md-4 text-center">
-                    <img src="{{ asset('/storage/bank/bca.png') }}" alt="" class="w-100">
-                    <p class="mt-3 text-muted">0009092983289323</p>
-                </div>
+                @foreach ($bank as $v)
+                    <div class="col-lg-3 col-md-4 text-center">
+                        <img src="{{ asset($v->path_image) }}" alt="" class="w-100">
+                        <p class="mt-3 text-muted">{{ $v->code }}</p>
+                    </div>
+                @endforeach
             </div>
 
             <p class="text-center mt-3 mt-lg-4">
@@ -49,7 +43,7 @@
             </p>
            
             <div class="text-center mt-3 mt-lg-4">
-                <a href="" class="btn btn-primary btn-lg">Konfirmasi Pembayaran</a>
+                <a href="{{ url('/donation/'. $campaign->id .'/payment-confirmation/'. $donation->order_number) }}" class="btn btn-primary btn-lg">Konfirmasi Pembayaran</a>
             </div>
 
             <div class="informasi d-flex justify-content-center align-items-center mt-3 mt-lg-4">
@@ -57,11 +51,13 @@
                     <i class="fas fa-info fa-4x m-auto"></i>
                 </div> 
                 <div class="bg-white rounded-right info text-center w-100 p-4 h-100">
-                   <p>Kami sudah membuatkan akun Pendana untuk anda, silahkan cek email anda.</p>
-                   <strong>(example@gmail.com)</strong>
+                   <p>Kami sudah membuatkan akun {{ $setting->company_name }} untuk anda, silahkan cek email anda.</p>
+                   <strong>({{ $setting->email }})</strong>
                 </div> 
             </div>
         </div>
     </div>
 </div>
 @endsection
+
+<x-toast />

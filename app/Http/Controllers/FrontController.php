@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bank;
 use App\Models\Campaign;
 use App\Models\Category;
 use App\Models\Contact;
+use App\Models\Donation;
 use App\Models\Subscriber;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -84,16 +86,64 @@ class FrontController extends Controller
             }
         )
         ->get();
-            dd( $user);
-        return view('front.donation.create', compact('campaign'));
+
+        return view('front.donation.create', compact('campaign', 'user'));
     }
 
-    public function donationPayment($id) {
-        return view('front.donation.payment');
+    public function storeDonatian(Request $request, $id) {
+        $validated = Validator::make($request->all(), [
+            'nominal' => 'integer|min:500',
+            'user_id' => 'required|exists:users,id',
+            'anonim' => 'nullable|in:1,0',
+            'support' => 'nullable',
+        ]);
+
+        if ($validated->fails()) {
+            return back()
+                ->withInput()
+                ->withErrors($validated->errors());
+        }
+
+        $campaign = Campaign::findOrFail($id);
+
+        $donation = Donation::create([
+            'campaign_id' => $campaign->id,
+            'nominal' => $request->nominal,
+            'user_id' => $request->user_id,
+            'anonim' => $request->anonim,
+            'support' => $request->support,
+            'order_number' => 'PX'. mt_rand(000000, 999999),
+            'status' => 'not confirmed'
+        ]);
+
+        return redirect('/donation/'. $campaign->id .'/payment/'. $donation->order_number)
+                ->with([
+                    'message' =>'Donasi baru berhasil disimpan',
+                    'success' => true
+                ]);
     }
 
-    public function donationPaymentConfirmation($id) {
-        return view('front.donation.payment-confirmation');
+    public function donationPayment($id, $order_number) {
+        $campaign = Campaign::findOrFail($id);
+        $donation = Donation::where('order_number', $order_number)->first();
+        $bank = Bank::all();
+
+        if (! $donation) {
+            abort(404);
+        }
+
+        return view('front.donation.payment', compact('campaign', 'donation', 'bank'));
+    }
+
+    public function donationPaymentConfirmation($id, $order_number) {
+        $campaign = Campaign::findOrFail($id);
+        $donation = Donation::where('order_number', $order_number)->first();
+
+        if (! $donation) {
+            abort(404);
+        }
+
+        return view('front.donation.payment', compact('campaign', 'donation'));
     }
 
     public function subscriberStore(Request $request) {

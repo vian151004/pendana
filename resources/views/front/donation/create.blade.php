@@ -6,14 +6,14 @@
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-10">
-            <form action="" method="POST">
+            <form action="{{ url('/donation/'. $campaign->id) }}" method="POST">
                 @csrf
 
                 <div class="card">
                     <div class="card-body d-flex">
                         <div class="thumbnail rounded w-25" style="overflow: hidden;">
                             @if ( asset('storage'. ($campaign->path_image)) )
-                            <img src="{{ asset('storage'.( $campaign->path_image)) }}" class="w-100" alt="...">
+                            <img src="{{ url('storage'. ($campaign->path_image)) }}" class="w-100" alt="...">
                             @else
                             <img src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22286%22%20height%3D%22180%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.
                                 org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20286%20180%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_
@@ -35,7 +35,14 @@
                     <div class="card-body">
                         <div class="bg-light rounded d-flex align-items-center p-3">
                             <h1 class="font-weight-bold w-25">Rp.</h1>
-                            <input type="number" class="form-control" name="nominal" placeholder="Masukkan nominal donasi" value="0">
+                            <div class="form-group w-75">
+                                <input type="number" class="form-control @error('nominal') is-invalid @enderror" name="nominal" placeholder="Masukkan nominal donasi" value="0">
+                                @error('nominal')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
                         </div>
                         
                         <div class="alert alert-primary mt-3">
@@ -45,38 +52,60 @@
                         @if (auth()->user()->hasRole('admin'))
                         <div class="form-group">
                             <label for="user_id">Donatur</label>
-                            <select name="user_id" id="user_id" class="form-control">
-                                <option disabled selected>Pilih Donatur</option>
+                            <select name="user_id" id="user_id" class="form-control @error('user_id') is-invalid @enderror select2">
+                                <option disabled selected>Pilih salah satu</option>
+                                @foreach ($user as $v)
+                                    <option value="{{ $v->id }}" data-phone="{{ $v->phone }}">{{ $v->name }}</option>
+                                @endforeach
                             </select>
+                            @error('user_id')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror 
                         </div>
-                        <div class="form-group">
-                            <label>087830836172</label>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="anonim" name="anonim">
-                                <label class="custom-control-label" for="anonim">Sembunyikan nama saya (Anonim)</label>
-                            </div>
+                        <div class="form-group mb-0 phone" style="display: none;">
+                            <label></label>    
                         </div>
                         @else
                         <input type="hidden" name="user_id" value="{{ auth()->id() }}">
-                        <div class="form-group">
-                            <label>087830836172</label>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="anonim" name="anonim">
-                                <label class="custom-control-label" for="anonim">Sembunyikan nama saya (Anonim)</label>
-                            </div>
+                        <div class="form-group mb-0">
+                            <label>{{ auth()->user()->phone }}</label>
                         </div>
                         @endif
 
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="anonim" name="anonim" value="1"> {{-- kalau di checklist, berarti value ny 1 --}}
+                                <label class="custom-control-label" for="anonim">Sembunyikan nama saya (Anonim)</label>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <textarea name="support" id="support" rows="4" class="form-control" placeholder="Tulis dukungan atau doa untuk penggalangan dana ini. Contoh:semoga cepet sembuh, ya!!!"></textarea>
                         </div>
                     </div>
                 </div>
                 <div class="form-group mt-3">
-                    <a href="" class="btn btn-primary btn-block">Lanjutkan Pembayaran</a>
+                    <button class="btn btn-primary btn-block">Lanjutkan Pembayaran</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 @endsection
+
+@includeIf('includes.select2')
+
+@push('scripts')
+    <script>
+        $('[name=user_id]').on('change', function () {
+            let value = $(this).val();
+            let phone = $(`[name=user_id] option[value=${value}]`).data('phone');
+            
+            $('.phone').show();
+            $('.phone label').text(phone);
+        })
+    </script>
+@endpush
+
+
