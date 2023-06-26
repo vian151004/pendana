@@ -21,6 +21,6 @@
     Saya setuju dengan <strong>Syarat & Ketentuan</strong> donasi di Pendana
 </div>
 <div class="form-group">
-    <button class="btn btn-outline-primary" onclick="stepper.next()">Sebelumnya</button>
-    <button class="btn btn-primary" onclick="submitForm()">Selesai</button>
+    <button type="button" class="btn btn-outline-primary" onclick="stepper.next()">Sebelumnya</button>
+    <button class="btn btn-primary" >Selesai</button>
 </div>

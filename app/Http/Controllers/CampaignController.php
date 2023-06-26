@@ -81,7 +81,9 @@ class CampaignController extends Controller
      */
     public function create()
     {
-        //
+        $category = Category::orderBy('name')->get()->pluck('name', 'id');
+        
+        return view('front.campaign.index', compact('category'));
     }
 
     /**
@@ -92,7 +94,7 @@ class CampaignController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $rules = [
             'title' => 'required|min:8',
             'categories' => 'required',
             'short_description' => 'required',
@@ -104,7 +106,13 @@ class CampaignController extends Controller
             'note' => 'nullable',
             'receiver' => 'required',
             'path_image' => 'required|mimes:png,jpg,jpeg|max:2048'
-        ]);
+        ];
+
+        if (auth()->user()->hasRole('donatur')) {
+           $rules['status'] = 'nullable';
+        }
+
+        $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);

@@ -5,10 +5,10 @@
             onchange="preview('.preview-path_image', this.files[0])">
         <label class="custom-file-label" for="path_image">Choose file</label>
     </div>
-    <small class="text-muted">Format foto harus (jpg, jpeg, png)</small>
-    <img src="" class="img-thumbnail preview-path_image" style="display: none;">
+    <small class="text-muted d-block">Format foto harus (jpg, jpeg, png)</small>
+    <img src="" class="img-thumbnail preview-path_image w-50" style="display: none;">
 </div>
 <div class="form-group">
-    <button class="btn btn-outline-primary" onclick="stepper.next()">Sebelumnya</button>
-    <button class="btn btn-primary" onclick="stepper.next()">Selanjutnya</button>
+    <button type="button" class="btn btn-outline-primary" onclick="stepper.next()">Sebelumnya</button>
+    <button type="button" class="btn btn-primary" onclick="stepper.next()">Selanjutnya</button>
 </div>

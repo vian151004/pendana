@@ -4,6 +4,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name') }} - @yield('title')</title>
 
@@ -234,7 +235,7 @@
                  {{-- button --}}
                  <div class="col-lg-2 action" style="white-space: nowrap;">
                     <a href="{{ url('/donation') }}" class="btn btn-sm btn-light py-0 rounded-1">Donasi</a>
-                    <a href="{{ url('/campaign') }}" class="btn btn-sm btn-light py-0 rounded-1">Galang Dana</a>
+                    <a href="{{ route('campaign.create') }}" class="btn btn-sm btn-light py-0 rounded-1">Galang Dana</a>
                  </div>
             </div>
         </div>    
@@ -325,37 +326,16 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
-    </script>
+    <script src="{{ asset('/AdminLTE/plugins/jquery/jquery.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous">
     </script>
 
+<!-- AdminLTE App -->
+<script src="{{ asset('/AdminLTE/dist/js/adminlte.js') }}"></script>
+<script src="{{ asset('/js/custom.js') }}"></script>
+
     @stack('scripts_vendor')
-
-    <!-- AdminLTE App -->
-    <script src="{{ asset('/AdminLTE/dist/js/adminlte.js') }}"></script>
-
-    <script>
-        $('.navbar-toggler').on('click', function () {
-            $(this).removeClass('first-load');
-        })
-
-        $('.custom-file-input').on('change', function () {
-            let filename = $(this).val().split('\\').pop();
-            $(this)
-                .next('.custom-file-label') 
-                .addClass('selected')
-                .html(filename);
-        });
-
-        function preview(target, image) {
-            $(target)
-                .attr('src', window.URL.createObjectURL(image))
-                .show();
-        }
-    </script>
 
     @stack('scripts')
 </body>
