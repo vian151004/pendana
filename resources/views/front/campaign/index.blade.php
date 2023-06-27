@@ -17,7 +17,7 @@
                         <button type="button" class="step-trigger" role="tab" aria-controls="judul-part"
                             id="judul-part-trigger">
                             <span class="bs-stepper-circle">1</span>
-                            <span class="bs-stepper-label d-lg-inline-block d-none ">Judul</span>
+                            <span class="bs-stepper-label">Judul</span>
                         </button>
                     </div>
                     <div class="line"></div>
@@ -54,8 +54,14 @@
                     </div>
                 </div>
                 <div class="bs-stepper-content">
-                    <form action="{{ route('campaign.store') }}" method="POST" onsubmit="submitForm(this)" enctype="multipart/form-data">
+                    <form action="{{ isset($campaign) ? route('campaign.update', $campaign->id) : route('campaign.store') }}" 
+                            method="POST" onsubmit="submitForm(this)" enctype="multipart/form-data">
                         @csrf
+
+                        @isset($campaign)
+                            @method('PUT')
+                        @endisset
+
                         <!-- your steps content here -->
                         <div id="judul-part" class="content" role="tabpanel" aria-labelledby="judul-part-trigger">
                             @includeIf('front.campaign.step.judul')
@@ -116,7 +122,7 @@
                 resetForm(originalForm);
 
                 setTimeout(() => {
-                    redirect.location = '/campaign'
+                    document.location = '{{ route('campaign.index') }}'
                 }, 3000);
             })
             .fail(errors => {

@@ -38,4 +38,9 @@ class Campaign extends Model
 
         return $color;
     }
+
+    function scopeDonatur($query)
+    {
+        return $query->where('user_id', auth()->id());
+    }
 }

@@ -20,6 +20,14 @@ function preview(target, image) {
 
 function resetForm(selector) {
     $(selector)[0].reset();
+
+    if ($(selector).find('.summernote').length != 0) {
+        $(selector).find('.summernote').summernote('code', '');
+    }
+
+    if ($(selector).find('.img-thumbnail').length != 0) {
+        $(selector).find('.img-thumbnail').attr('src', "");
+    }
     
     $('.select2').trigger('change');
     $('.form-control, .custom-select, [type=radio], [type=checkbox], [type=file], .select2, .note-editor').removeClass('is-invalid');
@@ -72,8 +80,15 @@ function loopErrors(errors) {
              $(`<span class="error invalid-feedback">${errors[error][0]}</span>`) 
                 .insertAfter($(`[name="${error}[]"]`).next());
             } else {
-                $(`<span class="error invalid-feedback">${errors[error][0]}</span>`) 
-                    .insertAfter($(`[name=${error}]`));
+                if ($(`[name=${error}]`).next().hasClass('input-group-append') || $(`[name=${error}]`).next().hasClass('input-group-preppend')) {
+                    $(`<span class="error invalid-feedback">${errors[error][0]}</span>`) 
+                        .insertAfter($(`[name="${error}]`).next());
+                    $('.input-group-append .input-group-text').css('border-radius', '0 .25rem .25rem 0')
+                    $('.input-group-prepend').next().css('border-radius', '0 .25rem .25rem 0')
+                } else {
+                    $(`<span class="error invalid-feedback">${errors[error][0]}</span>`) 
+                        .insertAfter($(`[name=${error}]`));
+                }
             }
         }
     }

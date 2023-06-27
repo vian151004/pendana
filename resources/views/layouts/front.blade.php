@@ -331,11 +331,11 @@
         integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous">
     </script>
 
-<!-- AdminLTE App -->
-<script src="{{ asset('/AdminLTE/dist/js/adminlte.js') }}"></script>
-<script src="{{ asset('/js/custom.js') }}"></script>
-
     @stack('scripts_vendor')
+
+    <!-- AdminLTE App -->
+    <script src="{{ asset('/AdminLTE/dist/js/adminlte.js') }}"></script>
+    <script src="{{ asset('/js/custom.js') }}"></script>
 
     @stack('scripts')
 </body>

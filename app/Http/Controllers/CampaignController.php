@@ -26,7 +26,9 @@ class CampaignController extends Controller
 
     public function data(Request $request)
     {
-        $query = Campaign::orderBy('publish_date', 'desc')
+        $query = Campaign::when(auth()->user()->hasRole('donatur'), function ($query) {
+            $query->donatur();
+            })
             ->when($request->has('status') && $request->status != "", function ($query) use ($request) {
                 $query->where('status', $request->status);
             })
@@ -35,7 +37,8 @@ class CampaignController extends Controller
                 function ($query) use ($request) {
                     $query->whereBetween('publish_date', $request->only('start_date', 'last_date'));
                 }
-            );
+            )
+            ->orderBy('publish_date', 'desc');
 
         return datatables($query)
             ->addIndexColumn()
@@ -43,12 +46,12 @@ class CampaignController extends Controller
                 return $query->title .'<br><small>'. $query->short_description .'</small>';
             })
             ->editColumn('path_image', function ($query) {
-                // return '
-                // <iframe src=" ' . asset('storage'). $query->path_image  . ' "  width="100%" height="80px" frameborder="0"></iframe>
-                // ';
                 return '
-                    <img src=" ' . 'storage'. $query->path_image  . ' " class="img-thumbnail">
+                <iframe src=" ' . asset('storage'). $query->path_image  . ' "  width="80%" height="140px" frameborder="0"></iframe>
                 ';
+                // return '
+                //     <img src=" ' . 'storage'. $query->path_image  . ' " class="img-thumbnail">
+                // ';
                 // return '<img src="'. Storage::disk('public')->url($query->path_image) .'" class="img-thumbnail">';
             })
             ->editColumn('status', function ($query) {
@@ -58,16 +61,32 @@ class CampaignController extends Controller
                 return $query->user->name;
             })
             ->addColumn('action', function ($query) {
-                return '
-                <a href="'. route('campaign.detail', $query->id) .'" class="btn btn-link text-dark">
-                    <i class="fas fa-search-plus"></i>
-                </a>
-                <button onclick="editForm(`'.route('campaign.show', $query->id).'`)" class="btn btn-link text-primary">
-                    <i class="fas fa-pencil-alt"></i>
-                </button>
-                <button class="btn btn-link text-danger" onclick="deleteData(`'.route('campaign.destroy', $query->id).'`)">
-                    <i class="fas fa-trash"></i>
+                $text = '
+                    <a href="'. route('campaign.show', $query->id) .'" class="btn btn-link text-dark">
+                        <i class="fas fa-search-plus"></i>
+                    </a>
                 ';
+
+                if (auth()->user()->hasRole('donatur')) {
+                    $text .= '
+                        <a href="'.route('campaign.edit', $query->id).'" class="btn btn-link text-primary">
+                            <i class="fas fa-pencil-alt"></i>
+                        </a>
+                    ';
+                } else {
+                    $text .='
+                        <button onclick="editForm(`'.route('campaign.show', $query->id).'`)" class="btn btn-link text-primary">
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
+                    ';
+                }
+                $text .= '
+                    <button class="btn btn-link text-danger" onclick="deleteData(`'.route('campaign.destroy', $query->id).'`)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                ';
+
+                return $text;
             })
             ->rawColumns(['short_description', 'path_image', 'status', 'action'])
             ->escapeColumns([])
@@ -101,7 +120,7 @@ class CampaignController extends Controller
             'body' => 'required|min:8',
             'publish_date' => 'required',
             'status' => 'required|in:publish,archived,pending',
-            'goal' => 'required|integer',
+            'goal' => 'required|integer|min:100000',
             'end_date' => 'required|date_format:Y-m-d H:i',
             'note' => 'nullable',
             'receiver' => 'required',
@@ -135,26 +154,31 @@ class CampaignController extends Controller
      * @param  \App\Models\Campaign  $campaign
      * @return \Illuminate\Http\Response
      */
-    public function show(Campaign $campaign)
+    public function show(Request $request, Campaign $campaign)
     {
+        if (! $request->ajax()) {
+            return view('campaign.detail', compact('campaign'));
+        }
+        
         $campaign->publish_date = date('Y-m-d H:i', strtotime($campaign->publish_date));
         $campaign->end_date = date('Y-m-d H:i', strtotime($campaign->end_date));
         $campaign->categories = $campaign->category_campaign;
+        $campaign->path_image = asset('storage'. ($campaign->path_image));
 
         return response()->json(['data' => $campaign ]);
     }
 
     /**
-     * Show detail data.
-     *
-     * @param  int $id  
+     * Show edit form.
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function detail($id)
+    public function edit($id)
     {
+        $category = Category::orderBy('name')->get()->pluck('name', 'id');
         $campaign = Campaign::findOrFail($id);
         
-        return view('campaign.detail', compact('campaign'));
+        return view('front.campaign.index', compact('category', 'campaign'));
     }
 
     /**
@@ -166,19 +190,25 @@ class CampaignController extends Controller
      */
     public function update(Request $request, Campaign $campaign)
     {
-        $validator = Validator::make($request->all(), [
+        $rules = [
             'title' => 'required|min:8',
             'categories' => 'required',
             'short_description' => 'required',
             'body' => 'required|min:8',
             'publish_date' => 'required',
             'status' => 'required|in:publish,archived,pending',
-            'goal' => 'required|integer',
+            'goal' => 'required|integer|min:100000',
             'end_date' => 'required|date_format:Y-m-d H:i',
             'note' => 'nullable',
             'receiver' => 'required',
             'path_image' => 'nullable|mimes:png,jpg,jpeg|max:2048'
-        ]);
+        ];
+
+        if (auth()->user()->hasRole('donatur')) {
+           $rules['status'] = 'nullable';
+        }
+
+        $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
