@@ -122,7 +122,7 @@
                 resetForm(originalForm);
 
                 setTimeout(() => {
-                    document.location = '{{ route('campaign.index') }}'
+                    document.location = '{{ route('campaign.index') }}';
                 }, 3000);
             })
             .fail(errors => {

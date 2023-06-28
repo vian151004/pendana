@@ -14,7 +14,7 @@
                 @if (auth()->user()->hasRole('admin'))
                     <button onclick="addForm(`{{ route('campaign.store') }}`)" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Tambah</button>
                 @else
-                    <a href="{{ route('campaign.create') }}" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Tambah</a>
+                    <a href="{{ url('/campaign') }}" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Tambah</a>
                 @endif
             </x-slot>
 

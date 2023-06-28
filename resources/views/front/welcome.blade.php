@@ -67,7 +67,7 @@
         <div class="card p-4 border text-center mb-0">
             <h1 class="display-4 font-weight-bold">GALANG DANA</h1>
         <p class="lead text-capitalize mt-3">Untuk hal yang anda perjuangkan demi kemanusiaan</p>
-        <a href="{{ route('campaign.create') }}" class="btn btn-primary btn-lg rounded w-50 m-auto">Galang Dana Sekarang</a>
+        <a href="{{ url('/campaign') }}" class="btn btn-primary btn-lg rounded w-50 m-auto">Galang Dana Sekarang</a>
         </div>
     </div>
 </div>
@@ -175,5 +175,3 @@
     </div>
 </div>
 @endsection
-
-<x-toast />

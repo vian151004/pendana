@@ -40,6 +40,11 @@
         .note-editor.is-invalid {
             border-color: var(--danger);
         }
+        .nav-sidebar .nav-header {
+            font-size: .9rem;
+            font-weight: bold;
+            color: #889;
+        }
     </style>
 
     @stack('css')

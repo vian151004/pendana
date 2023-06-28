@@ -132,5 +132,3 @@
 </div>
 
 @endsection
-
-<x-toast />

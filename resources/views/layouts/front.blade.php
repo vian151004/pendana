@@ -235,7 +235,7 @@
                  {{-- button --}}
                  <div class="col-lg-2 action" style="white-space: nowrap;">
                     <a href="{{ url('/donation') }}" class="btn btn-sm btn-light py-0 rounded-1">Donasi</a>
-                    <a href="{{ route('campaign.create') }}" class="btn btn-sm btn-light py-0 rounded-1">Galang Dana</a>
+                    <a href="{{ url('/campaign') }}" class="btn btn-sm btn-light py-0 rounded-1">Galang Dana</a>
                  </div>
             </div>
         </div>    
@@ -325,6 +325,8 @@
             </div>
         </div>
     </div>
+
+    <x-toast />
 
     <script src="{{ asset('/AdminLTE/plugins/jquery/jquery.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
