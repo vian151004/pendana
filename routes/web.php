@@ -3,8 +3,12 @@
 use App\Http\Controllers\{
     CampaignController,
     CategoryController,
+    ContactController,
     DashboardController,
+    DonationController,
+    DonaturController,
     SettingController,
+    SubscriberController,
     UserProfileInformationController
 };
 use App\Http\Controllers\Front\{
@@ -82,6 +86,28 @@ Route::group([
     Route::resource('/campaign', CampaignController::class);
     Route::put('/campaign/{id}/update_status', [CampaignController::class, 'updateStatus'])
         ->name('campaign.update_status');
+
+    Route::get('/donation/data', [DonationController::class, 'data'])
+        ->name('donation.data');
+    Route::resource('/donation', DonationController::class);
+
+    Route::group([
+        'middleware' => 'role:admin'
+    ], function () {
+        Route::get('/donatur/data', [DonaturController::class, 'data'])
+            ->name('donatur.data');
+        Route::resource('/donatur', DonaturController::class);
+
+        Route::get('/contact/data', [ContactController::class, 'data'])
+            ->name('contact.data');
+        Route::resource('/contact', ContactController::class)
+            ->only('index', 'destroy');
+
+        Route::get('/subscriber/data', [SubscriberController::class, 'data'])
+            ->name('subscriber.data');
+        Route::resource('/subscriber', SubscriberController::class)
+            ->only('index', 'destroy');
+    });
 });
 
 

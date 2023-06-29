@@ -226,8 +226,7 @@
                 <li class="nav-header">MASTER</li>
                     @if (auth()->user()->hasRole('admin'))
                     <li class="nav-item">
-                        <a href="{{ route('category.index') }}"
-                            class="nav-link {{ request()->is('admin/category*') ? 'active' : '' }}">
+                        <a href="{{ route('category.index') }}" class="nav-link {{ request()->is('admin/category*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-cube"></i>
                             <p>
                                 Kategori
@@ -248,14 +247,16 @@
                 @endif
 
                 <li class="nav-header">REFERENSI</li>
+                @if (auth()->user()->hasRole('admin'))
                 <li class="nav-item">
-                    <a href="pages/widgets.html" class="nav-link">
+                    <a href="{{ route('donatur.index') }}" class="nav-link {{ request()->is('admin/donatur*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-user-plus"></i>
                         <p>
                             Donatur
                         </p>
                     </a>
                 </li>
+                @endif
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-donate"></i>
@@ -266,7 +267,7 @@
                 </li>
                 @if (auth()->user()->hasRole('admin'))
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('contact.index') }}" class="nav-link {{ request()->is('admin/contact*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-envelope"></i>
                         <p>
                             Kontak Masuk
@@ -274,7 +275,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('subscriber.index') }}" class="nav-link {{ request()->is('admin/subscriber*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-user-plus"></i>
                         <p>
                             Subscriber
