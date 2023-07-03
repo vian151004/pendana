@@ -19,8 +19,8 @@
                 </div>
             </div>
         </div>
-       <div class="row justify-content-center">
-            <div class="col-lg-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-4">
                 <div class="form-group">
                     <label for="account">Nomor Rekening</label>
                     <input type="text" class="form-control @error('account') is-invalid @enderror" name="account" id="account" 
@@ -30,7 +30,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-lg-5">
+            <div class="col-lg-4">
                 <div class="form-group">
                     <label for="name">Nama</label>
                     <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="name" 
@@ -40,7 +40,21 @@
                     @enderror
                 </div>
             </div>
-       </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input @error('is_main') is-invalid @enderror" name="is_main" id="is_main" 
+                        value="{{ old('is_main') ?? 1 }}" 
+                        {{ old('is_main') == 1 ? 'checked' : '' }}>
+                    <label class="custom-control-label" for="is_main">Akun Utama?</label>
+                    @error('is_main')
+                        <span class="invalid-feedback">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div>
+        </div>
         
         <x-slot name="footer">
             <button type="reset" class="btn btn-dark">Reset</button>
@@ -70,7 +84,7 @@
             <tr>
                 <td>{{ $k+1 }}</td>
                 <td>{{ $v->pivot->name }}</td>
-                <td>{{ $v->pivot->account }}</td>
+                <td>{{ $v->pivot->account }} {!! $v->pivot->is_main ? '<small class="text-primary"><i class="fas fa-check-circle"></i></small>' : '' !!}</td>
                 <td>{{ $v->name }}</td>
                 <td>
                     <form action="{{ route('profile.bank.destroy', $v->id) }}" method="POST">

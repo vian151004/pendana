@@ -197,8 +197,7 @@
                 @endif
             </div>
             <div class="info">
-                <a href="{{ route('profile.show') }}" class="d-block" data-toggle="tooltip" data-placement="top"
-                    title="Edit Profil">
+                <a href="{{ route('profile.show') }}" class="d-block" data-toggle="tooltip" data-placement="top" title="Edit Profil">
                     {{ auth()->user()->name }}
                     <i class="fas fa-pencil-alt ml-2 text-sm text-primary"></i>
                 </a>
@@ -258,7 +257,7 @@
                 </li>
                 @endif
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('donation.index') }}" class="nav-link {{ request()->is('admin/donation*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-donate"></i>
                         <p>
                             Daftar Donasi
@@ -287,22 +286,10 @@
                 @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('donatur'))
                 <li class="nav-header">REPORT</li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-chart-line"></i>
+                    <a href="{{ route('report.index') }}" class="nav-link {{ request()->is('admin/report*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-file-pdf"></i>
                         <p>
                             Laporan
-                        </p>
-                    </a>
-                </li>
-                @endif
-
-                @if (auth()->user()->hasRole('donatur'))
-                <li class="nav-header">LOG</li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-info-circle"></i>
-                        <p>
-                            Log Aktivitas
                         </p>
                     </a>
                 </li>
@@ -311,8 +298,7 @@
                 @if (auth()->user()->hasRole('admin'))
                 <li class="nav-header">SISTEM</li>
                 <li class="nav-item">
-                    <a href="{{ route('setting.index') }}"
-                        class="nav-link {{ request()->is('setting*') ? 'active' : '' }}">
+                    <a href="{{ route('setting.index') }}" class="nav-link {{ request()->is('admin/setting*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-cog"></i>
                         <p>
                             Pengaturan

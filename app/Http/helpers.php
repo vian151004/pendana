@@ -46,3 +46,19 @@ if (!function_exists('tanggal_indonesia')) {
         return $text;
     }
 }
+
+if (! function_exists('sembunyikan_text')) {
+    function sembunyikan_text($words, $offset = 0)
+    {
+        $text = '';
+        for ($i = 0; $i < strlen($words); $i++) { 
+            if (($i + $offset) >= strlen($words) && ! ($offset >= strlen($words))) {
+                $text .= $words[$i];
+            } else {
+                $text .= '*';
+            }
+        }
+
+        return $text;
+    }
+}

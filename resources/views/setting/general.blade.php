@@ -146,4 +146,3 @@
     </x-card>
 </form>
 
-<x-toast />

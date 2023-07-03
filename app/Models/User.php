@@ -68,8 +68,15 @@ class User extends Authenticatable
     function bank_user() 
     {
         return $this->belongsToMany(Bank::class, 'bank_user', 'user_id')
-            ->withPivot('account', 'name')
+            ->withPivot('account', 'name', 'is_main')
             ->withTimestamps();
+    }
+    
+    public function mainAccount()
+    {
+        return $this->bank_user()
+            ->where('is_main', 1)
+            ->first();    
     }
 
     function scopeDonatur($query)

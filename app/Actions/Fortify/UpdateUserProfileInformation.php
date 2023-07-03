@@ -28,13 +28,37 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 
         if ($input['pills'] == 'bank') {
             $rules = [
-                'bank_id' => 'required|exists:bank,id|unique:bank_user,bank_id',
+                // 'required|exists:bank,id|unique:bank_user,bank_id'
+                'bank_id' => [
+                    'required',
+                    'exists:bank,id',
+                    Rule::unique('bank_user')->where(function ($query) use ($input) {
+                        return ! $query->where('user_id', auth()->id())
+                                       ->where('user_id', $input['bank_id']);
+                    })
+                ],
                 'account' => 'required|unique:bank_user,account',  
                 'name' => 'required', 
+                'is_main' => [
+                    'nullable',
+                    Rule::unique('bank_user')->where(function ($query) use ($input) {
+                        $countAvailable = $query->where('user_id', auth()->id())
+                            ->where('is_main', 1)
+                            ->count();
+                        
+                        if ($input['is_main'] == 1 && $countAvailable > 0) {
+                            return false;
+                        }
+
+                        return true;
+                    })
+                ]
             ];
         }
 
-        $validated = Validator::make($input, $rules);
+        $validated = Validator::make($input, $rules, [
+            'is_main.unique' => 'Akun utama sudah ada sebelumnya.'
+        ]);
         
         if ($validated->fails()) {
             return back()
@@ -51,7 +75,8 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
         if ($input['pills'] == 'bank') {
             $user->bank_user()->attach($input['bank_id'], [
                 'account' => $input['account'],
-                'name' => $input['name']
+                'name' => $input['name'],
+                'is_main' => $input['is_main'] ?? 0
             ]);
         }
 

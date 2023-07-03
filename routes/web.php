@@ -7,6 +7,7 @@ use App\Http\Controllers\{
     DashboardController,
     DonationController,
     DonaturController,
+    ReportController,
     SettingController,
     SubscriberController,
     UserProfileInformationController
@@ -87,6 +88,11 @@ Route::group([
     Route::put('/campaign/{id}/update_status', [CampaignController::class, 'updateStatus'])
         ->name('campaign.update_status');
 
+    Route::get('/campaign/{id}/cashout', [CampaignController::class, 'cashout'])
+        ->name('campaign.cashout');
+    Route::post('/campaign/{id}/cashout', [CampaignController::class, 'cashoutStore'])
+        ->name('campaign.cashout.store');
+
     Route::get('/donation/data', [DonationController::class, 'data'])
         ->name('donation.data');
     Route::resource('/donation', DonationController::class);
@@ -107,6 +113,11 @@ Route::group([
             ->name('subscriber.data');
         Route::resource('/subscriber', SubscriberController::class)
             ->only('index', 'destroy');
+
+        Route::get('/report/data', [ReportController::class, 'data'])
+            ->name('report.data');
+        Route::get('/report', [ReportController::class, 'index'])
+            ->name('report.index');
     });
 });
 
