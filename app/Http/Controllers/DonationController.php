@@ -39,10 +39,22 @@ class DonationController extends Controller
                 return tanggal_indonesia($query->created_at);
             })
             ->addColumn('action', function ($query) {
-                return '
+                $action = '';
+                if ($query->user_id == auth()->id()) {
+                    $action .= '<a href="'. url('/donation/'. $query->campaign->id .'/payment-confirmation/'. $query->order_number) .'" class="btn btn-link text-primary"><i class="fas fa-hand-holding-usd"></i></a>';
+                }
+                
+                $action .= '
                     <a href="'. route('donation.show', $query->id) .'" class="btn btn-link text-dark"><i class="fas fa-search-plus"></i></a>
-                    <button class="btn btn-link text-danger" onclick="deleteData(`'. route('donation.destroy', $query->id) .'`)"><i class="fas fa-trash-alt"></i></button>
                 ';
+
+                if ($query->status != 'confirmed') {
+                    $action .= '
+                        <button class="btn btn-link text-danger" onclick="deleteData(`'. route('donation.destroy', $query->id) .'`)"><i class="fas fa-trash-alt"></i></button>
+                    ';
+                }
+
+                return $action;
             })
             ->escapeColumns([])
             ->make(true);

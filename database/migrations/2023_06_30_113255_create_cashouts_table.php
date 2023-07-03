@@ -26,7 +26,7 @@ return new class extends Migration
                 'pending',
                 'success',
                 'rejected',
-                'cenceled'
+                'canceled'
             ]);
             $table->timestamps();
         });

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\{
     CampaignController,
+    CashoutController,
     CategoryController,
     ContactController,
     DashboardController,
@@ -96,6 +97,10 @@ Route::group([
     Route::get('/donation/data', [DonationController::class, 'data'])
         ->name('donation.data');
     Route::resource('/donation', DonationController::class);
+
+    Route::get('/cashout/data', [CashoutController::class, 'data'])
+        ->name('cashout.data');
+    Route::resource('/cashout', CashoutController::class);
 
     Route::group([
         'middleware' => 'role:admin'

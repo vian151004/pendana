@@ -76,7 +76,7 @@
                 </div>
                 <div class="col mt-3">
                     @if ($bank)
-                    <button class="btn btn-warning float-left" data-toggle="modal" data-target="#ganti-rekening">Ganti Rekening Tujuan</button>
+                    <button class="btn btn-primary float-left" data-toggle="modal" data-target="#ganti-rekening">Ganti Rekening Tujuan</button>
                     @else
                     <button class="btn btn-warning float-left" data-toggle="modal" data-target="#ganti-rekening">Silahkan Lengkapi Rekening Tujuan</button>
                     @endif
@@ -86,20 +86,28 @@
     </div>
 
     <div class="col-lg-5">
-        <h3 class="text-primary">Yang bisa dicairkan: Rp. {{ format_uang($campaign->nominal) }}</h3>
+        <h3 class="text-primary">Yang bisa dicairkan: Rp. {{ format_uang($campaign->nominal - $campaign->cashouts->whereIn('status', ['success', 'pending'])->sum('cashout_amount')) }}</h3>
+        @if ($campaign->cashouts->whereIn('status', ['success', 'pending'])->sum('cashout_amount') > 0)
+            @if ($campaign->cashout_latest->status == 'success')
+            <h5 class="d-block text-{{ $campaign->cashout_latest->statusColor() }}">Sebelumnya Anda telah mencairkan sebesar Rp. {{ format_uang($campaign->cashout_latest->cashout_amount) }}</h5>
+            <p>Terakhir dibuat pada {{ tanggal_indonesia($campaign->cashout_latest->created_at) }} {{ date('H:i', strtotime($campaign->cashout_latest->created_at)) }}</p>
+            @elseif ($campaign->cashout_latest->status == 'pending')
+            <h5 class="d-block text-{{ $campaign->cashout_latest->statusColor() }}">Admin sedang meninjau permintaan pengajuan pencairan Anda sebelumnya, sebesar Rp. {{ format_uang($campaign->cashout_latest->cashout_amount) }}</h5>
+            <p>Terakhir dibuat pada {{ tanggal_indonesia($campaign->cashout_latest->created_at) }} {{ date('H:i', strtotime($campaign->cashout_latest->created_at)) }}</p>
+            @endif
+        @endif
         <div class="alert alert-light border-primary">
-            Disarankan untuk melakukan pencairan dana pada jam kerja normal (Senin-Jumat 08.00-20.00)
-            untuk menghindari transaksi pending dikarenakan cut off time dari pihak bank bersangkutan.
+            Disarankan untuk melakukan pencairan dana pada jam kerja normal (Senin-Jumat 08.00-20.00) untuk menghindari transaksi pending dikarenakan terkena cut off time dari bank yang bersangkutan.
         </div>
 
         <x-card>
-            <form action="" method="POST" class="form-pencairan" onsubmit="reviewCashout()">
+            <form action="{{ route('campaign.cashout.store', $campaign->id) }}" method="post" class="form-pencairan" onsubmit="reviewCashout()">
                 @csrf
 
                 <input type="hidden" name="campaign_id" value="{{ $campaign->id }}">
                 <input type="hidden" name="user_id" value="{{ $campaign->user_id }}">
                 <input type="hidden" name="bank_id" value="{{ $bank->id ?? '' }}">
-                <input type="hidden" name="total" value="{{ $campaign->nominal }}">
+                <input type="hidden" name="total" value="{{ $campaign->nominal - $campaign->cashouts->whereIn('status', ['success', 'pending'])->sum('cashout_amount') }}">
 
                 <div class="form-group">
                     <label for="cashout_amount">Jumlah yang ingin dicairkan: <span class="text-danger">*</span></label>
@@ -107,8 +115,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1">Rp</span>
                         </div>
-                        <input type="text" class="form-control" name="cashout_amount" id="cashout_amount"
-                            onkeyup="format_uang(this)">
+                        <input type="text" class="form-control" name="cashout_amount" id="cashout_amount" onkeyup="format_uang(this)">
                     </div>
                     <small class="text-danger text-message"></small>
                 </div>
@@ -118,8 +125,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1">Rp</span>
                         </div>
-                        <input type="text" class="form-control" name="cashout_fee" id="cashout_fee"
-                            value="{{ format_uang(5000) }}" readonly>
+                        <input type="text" class="form-control" name="cashout_fee" id="cashout_fee" value="{{ format_uang(5000) }}" readonly>
                     </div>
                 </div>
                 <div class="form-group">
@@ -141,8 +147,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <button type="button" class="btn btn-success review-cashout" onclick="reviewCashout()"
-                        disabled>Review Cashout</button>
+                    <button type="button" class="btn btn-success review-cashout" onclick="reviewCashout()" disabled>Review Cashout</button>
                 </div>
             </form>
         </x-card>
@@ -208,13 +213,13 @@
 @push('scripts')
 <script>
     let modal = '#modal-form';
-    let total, 
+    let total,
         cashout_fee,
         cashout_amount,
         amount_received,
         remaining_amount,
         text_message,
-        review_cashout; 
+        review_cashout;
 
     $(function () {
         total = parseFloat($('[name=total]').val().replaceAll('.', ''));
@@ -227,6 +232,7 @@
 
         cashout_amount.on('keyup', function () {
             let value = parseFloat(this.value == '' ? 0 : this.value.replaceAll('.', ''));
+
             if (value < 50000) {
                 text_message.text('Jumlah minimal adalah 50.000');
                 review_cashout.attr('disabled', true);
@@ -244,7 +250,7 @@
                 remaining_amount.val(format_uang(total - value));
             }
         });
-    });       
+    });
     
     function reviewCashout() {
         $(modal).modal('show');
@@ -258,21 +264,21 @@
         $('.sisa-saldo').text(remaining_amount.val());
     }
 
-    function submitForm(originalForm) {
-        $.post({
-                url: $(originalForm).attr('action'),
-                data: new FormData(originalForm),
-                dataType: 'json',
-                contentType: false,
-                cache: false,
-                processData: false
-            })
+    function submitForm() {
+        const originalForm = '.form-pencairan';
+        $.post($(originalForm).attr('action'), $(originalForm).serialize())
             .done(response => {
                 $(modal).modal('hide');
                 showAlert(response.message, 'success');
-                $('.card-footer').remove();
+                resetForm(originalForm);
+
+                setTimeout(() => {
+                    location.reload();
+                }, 3000);
             })
             .fail(errors => {
+                $(modal).modal('hide');
+                
                 if (errors.status == 422) {
                     loopErrors(errors.responseJSON.errors);
                     return;

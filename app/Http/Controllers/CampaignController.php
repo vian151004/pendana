@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cashout;
 use App\Models\Campaign;
 use App\Models\Category;
 use Illuminate\Support\Str;
@@ -108,7 +109,7 @@ class CampaignController extends Controller
             'body' => 'required|min:8',
             'publish_date' => 'required|date_format:Y-m-d H:i',
             'status' => 'required|in:publish,archived,pending',
-            'goal' => 'required|integer|min:100000',
+            'goal' => 'required|regex:/^[0-9.]|min:7',
             'end_date' => 'required|date_format:Y-m-d H:i',
             'note' => 'nullable',
             'receiver' => 'required',
@@ -119,7 +120,9 @@ class CampaignController extends Controller
            $rules['status'] = 'nullable';
         }
 
-        $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make($request->all(), $rules, [
+            'goal.min' => 'Nominal minimal 100.000'
+        ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
@@ -127,6 +130,7 @@ class CampaignController extends Controller
 
         $data = $request->except('path_image', 'categories');
         $data['slug'] = Str::slug($request->title);
+        $data['goal'] = str_replace('.', '', $request->goal);
         $data['path_image'] = upload('campaign', $request->file('path_image'), 'campaign');
         $data['user_id'] = auth()->id();
 
@@ -156,6 +160,7 @@ class CampaignController extends Controller
         
         $campaign->publish_date = date('Y-m-d H:i', strtotime($campaign->publish_date));
         $campaign->end_date = date('Y-m-d H:i', strtotime($campaign->end_date));
+        $campaign->goal = format_uang($campaign->goal);
         $campaign->categories = $campaign->category_campaign;
         $campaign->path_image = asset('storage'. ($campaign->path_image));
 
@@ -178,7 +183,7 @@ class CampaignController extends Controller
             'body' => 'required|min:8',
             'publish_date' => 'required|date_format:Y-m-d H:i',
             'status' => 'required|in:publish,archived,pending',
-            'goal' => 'required|integer|min:100000',
+            'goal' => 'required|regex:/^[0-9.]|min:7',
             'end_date' => 'required|date_format:Y-m-d H:i',
             'note' => 'nullable',
             'receiver' => 'required',
@@ -189,7 +194,9 @@ class CampaignController extends Controller
            $rules['status'] = 'nullable';
         }
 
-        $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make($request->all(), $rules, [
+            'goal.min' => 'Nominal minimal 100.000'
+        ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
@@ -197,6 +204,7 @@ class CampaignController extends Controller
 
         $data = $request->except('path_image', 'categories');
         $data['slug'] = Str::slug($request->title);
+        $data['goal'] = str_replace('.', '', $request->goal);
 
         if ($request->hasFile('path_image')) {
             if (Storage::disk('public')->exists($campaign->path_image)) {
@@ -261,5 +269,37 @@ class CampaignController extends Controller
         }
 
         return view('campaign.cashout', compact('campaign'));
+    }
+
+    public function cashoutStore(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'campaign_id' => 'required|exists:campaigns,id',
+            'user_id' => 'required|exists:users,id',
+            'bank_id' => 'required|exists:bank,id',
+            'total' => 'required|integer',
+            'cashout_amount' => 'required|regex:/^[0-9.]+$/',
+            'cashout_fee' => 'required|regex:/^[0-9.]+$/',
+            'amount_received' => 'required|regex:/^[0-9.]+$/',
+            'remaining_amount' => 'required|regex:/^[0-9.]+$/'
+        ], [
+            'bank_id.required' => 'Silahkan lengkapi rekening tujuan terlebih dahulu.'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $attributes = $request->only('campaign_id', 'user_id', 'bank_id', 'total');
+        $attributes['status'] = 'pending';
+        foreach ($request->only('cashout_amount', 'cashout_fee', 'amount_received', 'remaining_amount') as $k => $v) {
+            $attributes[$k] = str_replace('.', '', $v);
+        }
+
+        $cashout = Cashout::create($attributes);
+        return response()->json([
+            'data' => $cashout,
+            'message' => 'Cashout berhasil dikirimkan, silahkan konfirmasi Admin untuk segera memproses request Anda.'
+        ]);
     }
 }

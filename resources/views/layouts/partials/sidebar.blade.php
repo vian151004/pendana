@@ -264,6 +264,14 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('cashout.index') }}" class="nav-link {{ request()->is('admin/cashout*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-hand-holding-usd"></i>
+                        <p>
+                            Daftar Pencairan
+                        </p>
+                    </a>
+                </li>
                 @if (auth()->user()->hasRole('admin'))
                 <li class="nav-item">
                     <a href="{{ route('contact.index') }}" class="nav-link {{ request()->is('admin/contact*') ? 'active' : '' }}">
