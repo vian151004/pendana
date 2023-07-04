@@ -63,7 +63,7 @@
                 </div>
                 <img src="" class="img-thumbnail preview-path_image w-50 mb-2" style="display: none;">
 
-                @if ( asset('storage'. ($payment->path_image)) )
+                @if ($payment->path_image)
                 <img src="{{ asset('storage'. ($payment->path_image)) }}" class="img-thumbnail preview-path_image w-50 mb-2">
                 @else
                 <img src="" class="img-thumbnail preview-path_image w-50 mb-2" style="display: none;">
@@ -89,5 +89,3 @@
     </div>
 </div>
 @endsection
-
-<x-toast />
