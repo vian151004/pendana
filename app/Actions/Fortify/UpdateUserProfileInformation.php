@@ -26,7 +26,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'path_image' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
         ];
 
-        if ($input['pills'] == 'bank') {
+        if (! empty($input['pills']) && $input['pills'] == 'bank') {
             $rules = [
                 // 'required|exists:bank,id|unique:bank_user,bank_id'
                 'bank_id' => [
@@ -72,7 +72,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 
         $user->update($input);
 
-        if ($input['pills'] == 'bank') {
+        if (! empty($input['pills']) && $input['pills'] == 'bank') {
             $user->bank_user()->attach($input['bank_id'], [
                 'account' => $input['account'],
                 'name' => $input['name'],
