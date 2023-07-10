@@ -7,10 +7,10 @@ class Setting extends Model
 {
     use HasFactory;
 
-    function bank_setting() 
+    public function bank_setting() 
     {
         return $this->belongsToMany(Bank::class, 'bank_setting', 'setting_id')
-            ->withPivot('account', 'name', 'is_main ')
+            ->withPivot('account', 'name', 'is_main')
             ->withTimestamps();
     }
 }

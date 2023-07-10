@@ -23,9 +23,9 @@
                     <label for="status2">Status</label>
                     <select name="status2" id="status2" class="custom-select">
                         <option value="" selected>Semua</option>
-                        <option value="publish">Publish</option>
-                        <option value="pending">Pending</option>
-                        <option value="archived">Diarsipkan</option>
+                        <option value="publish" {{ request('status') == 'publish' ? 'selected' : '' }}>Publish</option>
+                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                        <option value="archived" {{ request('status') == 'archived' ? 'selected' : '' }}>Diarsipkan</option>
                     </select>
                 </div>
 

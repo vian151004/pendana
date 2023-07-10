@@ -40,8 +40,14 @@ Route::get('/contact', [FrontContactController::class, 'index']);
 Route::post('/contact', [FrontContactController::class, 'store']);
 Route::get('/about', [AboutController::class, 'index']);
 Route::post('/subscriber', [FrontSubscriberController::class, 'store']);
-Route::resource('/campaign', FrontCampaignController::class)->only('index', 'create', 'edit');
 
+Route::group([
+    'middleware' => ['auth', 'role:admin,donatur']
+], function () {
+    Route::resource('/campaign', FrontCampaignController::class)->only('index', 'create', 'edit');
+});
+
+Route::get('/donation', [FrontDonationController::class, 'index']);
 Route::get('/donation', [FrontDonationController::class, 'index']);
 Route::group([
     'middleware' => ['auth', 'role:admin,donatur'],

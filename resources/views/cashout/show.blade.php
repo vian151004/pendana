@@ -16,8 +16,8 @@
 @endpush
 
 @section('content')
-<div class="row">
-    <div class="col-lg-7">
+<div class="row justify-content-center">
+    <div class="col-lg-10">
         <x-card>
             <x-slot name="header">
                 <h3>{{ $campaign->title }}</h3>
@@ -33,7 +33,9 @@
                 <h1 class="font-weight-bold">Rp. {{ format_uang($campaign->nominal) }}</h1>
             <p class="font-weight-bold">Terkumpul dari Rp. {{ format_uang($campaign->goal) }}</p>
             <div class="progress" style="height: .3rem;">
-                <div class="progress-bar" role="progressbar" style="width: {{ $campaign->nominal / $campaign->goal * 100 }}%" aria-valuenow="{{ $campaign->nominal / $campaign->goal * 100 }}" aria-valuemin="0" aria-valuemax="{{ 100 }}"></div>
+                <div class="progress-bar" role="progressbar" style="width: {{ $campaign->nominal / $campaign->goal * 100 }}%" 
+                    aria-valuenow="{{ $campaign->nominal / $campaign->goal * 100 }}" aria-valuemin="0" aria-valuemax="{{ 100 }}">
+                </div>
             </div>
             <div class="d-flex justify-content-between mt-1">
                 <p>{{ $campaign->nominal / $campaign->goal * 100 }}% tercapai</p>

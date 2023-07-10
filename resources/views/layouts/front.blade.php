@@ -261,13 +261,22 @@
                     <a class="nav-link @if(request()->is('contact')) active @endif" href="{{ url('/contact') }}">Kontak</a>
                     <a class="nav-link @if(request()->is('about')) active @endif" href="{{ url('/about') }}">Tentang Kami</a>
                     <div class="dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Bantuan
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            @if (auth()->guest())
                             <a class="dropdown-item" href="{{ route('login') }}">Login</a>
                             <a class="dropdown-item" href="{{ route('register') }}">Register</a>
+                            @else
+                            <a class="dropdown-item" href="{{ route('dashboard') }}">Dashboard</a>
+                            <a class="dropdown-item" href="#" onclick="document.querySelector('#form-logout').submit()">Keluar</a>
+
+                            <form action="{{ route('logout') }}" method="post" id="form-logout">
+                                @csrf
+                            </form>
+                            @endif
                         </div>
                     </div>
                 </ul>

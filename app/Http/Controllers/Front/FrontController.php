@@ -10,8 +10,8 @@ class FrontController extends Controller
 {
     public function index() {
         $campaign = Campaign::orderBy('publish_date', 'desc')
-            ->limit(6)
-            ->get();
+        ->where('status', 'publish')
+        ->paginate(6);
         
         return view('front.welcome', compact('campaign'));
     }

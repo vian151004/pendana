@@ -19,6 +19,7 @@
         .kategori .card:focus {
             transform: translateY(-5px);
         }
+
         .page-item .page-link {
             background: transparent;
             border-radius: .35rem;
@@ -36,6 +37,15 @@
             color: #ffffff;
             background: var(--primary);
             border-color: var(--primary);
+        }
+
+        .card-body2 {
+            min-height: 10rem;
+        }
+        @media (max-width: 575.98px) {
+            .card-body2 {
+                min-height: auto;
+            }
         }
     </style>
 @endpush
@@ -72,8 +82,8 @@
             <div class="col-lg-4 col-md-6">
                 <div class="card mt-4">
                     <div class="rounded-top" style="height:250px; overflow: hidden;">
-                        @if ( asset('storage'. ($v->path_image)) )
-                        <img src="{{ asset('storage'.( $v->path_image)) }}" class="card-img-top" alt="...">
+                        @if (asset('storage'.($v->path_image)))
+                        <img src="{{ asset('storage'.($v->path_image)) }}" class="card-img-top" alt="...">
                         @else
                         <img src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22286%22%20height%3D%22180%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.
                             org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20286%20180%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_
@@ -89,10 +99,14 @@
                             <p class="mb-0">Goal: <strong>{{ format_uang($v->goal) }}</strong></p>
                         </div>
                     </div>
-                    <div class="card-body p-2 border-top">
-                        <h5 class="card-title text-bold">{{ $v->title }}</h5>
+                    <div class="card-body card-body2 p-2 border-top">
+                        <a href="{{ url('/donation/'. $v->id) }}" class="card-title text-bold text-dark mb-3">{{ $v->title }}</a>
+                        @if (Str::length($v->short_description) > 0)
                         <p class="card-text">{{ Str::limit($v->short_description, 100, ' ...') }}</p>
-                    </div>
+                        @else
+                        <p class="card-text">Deskripsi tidak tersedia.</p>
+                        @endif
+                    </div>  
                     <div class="card-footer p-2">
                         <a href="{{ url('/donation/'. $v->id) }}" class="btn btn-primary d-block rounded">
                             <i class="fas fa-donate mr-2"></i>

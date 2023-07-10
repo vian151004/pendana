@@ -124,7 +124,7 @@
                 <h5 class="card-title">Gambar Unggulan</h5>
             </x-slot>
 
-            <img src="{{ Storage::disk('public')->url($donation->campaign->path_image) }}" class="img-thumbnail">
+            <img src="{{ asset('storage'.($donation->campaign->path_image)) }}" class="img-thumbnail">
         </x-card>
     </div>
 </div>
@@ -150,16 +150,16 @@
 <x-modal size="modal-lg" id="bukti-transaksi">
     <x-slot name="title">Bukti Transaksi</x-slot>
 
-    @if (Storage::disk('public')->exists($donation->payment->path_image))
-    <img src="{{ Storage::disk('public')->url($donation->payment->path_image) }}" alt="{{ $donation->payment->path_image }}"
+    @if (asset('storage'.($donation->payment->path_image)))
+    <img src="{{ asset('storage'.($donation->payment->path_image)) }}" alt="{{ $donation->payment->path_image }}"
         class="img-thumbnail">
     @else
     Tidak tersedia
     @endif
 
-    @if (Storage::disk('public')->exists($donation->payment->path_image))
+    @if (asset('storage'.($donation->payment->path_image)))
     <x-slot name="footer">
-        <a href="{{ Storage::disk('public')->url($donation->payment->path_image) }}" class="btn btn-success" download=""><i class="fas fa-download"></i></a>
+        <a href="{{ asset('storage'.($donation->payment->path_image)) }}" class="btn btn-success" download=""><i class="fas fa-download"></i></a>
     </x-slot>
     @endif
 </x-modal>

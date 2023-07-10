@@ -36,8 +36,8 @@
                         <div class="bg-light rounded d-flex align-items-center p-3">
                             <h1 class="font-weight-bold w-25">Rp.</h1>
                             <div class="form-group w-75">
-                                <input type="number" class="form-control @error('nominal') is-invalid @enderror" 
-                                    name="nominal" placeholder="Masukkan nominal donasi" value="{{ old('nominal') ?? 0 }}">
+                                <input type="text" class="form-control @error('nominal') is-invalid @enderror" 
+                                    name="nominal" placeholder="Masukkan nominal donasi" value="{{ old('nominal') ?? '' }}" onkeyup="format_uang(this)">
                                 @error('nominal')
                                     <div class="invalid-feedback">
                                         {{ $message }}

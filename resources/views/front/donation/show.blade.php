@@ -30,7 +30,7 @@
                 <div class="d-flex align-items-center">
                     <div class="img rounded-circle" style="width: 60px; overflow:hidden;">
                         @if ( asset('storage'. ($campaign->user->path_image)) )
-                        <img src="{{ asset('storage'.( $campaign->user->path_image)) }}" class="card-img-top" 
+                        <img src="{{ asset('storage'. ( $campaign->user->path_image)) }}" class="card-img-top" 
                             alt="...">
                         @else
                         <img src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22286%22%20height%3D%22180%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.

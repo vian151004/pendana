@@ -17,7 +17,7 @@
                 <div class="form-group">
                     <label for="name">Atas Nama (pengirim) <span class="text-danger">*</span></label>
                     <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" 
-                        value="{{ old('name') ?? ($payment->name ?? $campaign->user->name) }}">
+                        value="{{ old('name') ?? ($payment->name ?? $donation->user->name) }}">
                     @error('name')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -61,9 +61,9 @@
                         </div>
                     @enderror
                 </div>
-                <img src="" class="img-thumbnail preview-path_image w-50 mb-2" style="display: none;">
+                {{-- <img src="" class="img-thumbnail preview-path_image w-50 mb-2" style="display: none;"> --}}
 
-                @if ($payment->path_image)
+                @if (asset('storage'. ($payment->path_image)))
                 <img src="{{ asset('storage'. ($payment->path_image)) }}" class="img-thumbnail preview-path_image w-50 mb-2">
                 @else
                 <img src="" class="img-thumbnail preview-path_image w-50 mb-2" style="display: none;">

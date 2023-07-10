@@ -42,7 +42,7 @@
         processing: true,
         autoWidth: false,
         ajax: {
-            url: '{{ route('cashout.data') }}'
+            url: '{{ route('cashout.data', ['status' => request('status')]) }}'
         },
         columns: [
             {data: 'DT_RowIndex', searchable: false, sortable: false},

@@ -9,7 +9,7 @@
         <div class="col-lg-6">
             <div class="form-group">
                 <label for="title">Judul</label>
-                <input type="text" name="title" id="title" class="form-control">
+                <input type="text" name="title" class="form-control">
             </div>
         </div>
         <div class="col-lg-6">
@@ -41,7 +41,7 @@
                 <div class="input-group datetimepicker" id="publish_date" data-target-input="nearest">
                     <input type="text" name="publish_date" class="form-control datetimepicker-input" data-target="#publish_date" />
                     <div class="input-group-append" data-target="#publish_date" data-toggle="datetimepicker">
-                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        <div class="input-group-text"><i class="fas fa-calendar"></i></div>
                     </div>
                 </div>
             </div>
@@ -51,8 +51,8 @@
                 <label for="status">Status</label>
                 <select name="status" id="status" class="custom-select">
                     <option disabled selected>Pilih salah satu!</option>
-                    <option value="publish">Publish</option>
                     <option value="pending">Pending</option>
+                    <option value="publish">Publish</option>
                     <option value="archived">Diarsipkan</option>
                 </select>
             </div>
@@ -63,7 +63,7 @@
         <div class="col-lg-6">
             <div class="form-group">
                 <label for="goal">Goal</label>
-                <input type="number" name="goal" id="goal" class="form-control"> 
+                <input type="text" name="goal" id="goal" class="form-control" onkeyup="format_uang(this)"> 
             </div>
         </div>  
         <div class="col-lg-6">
@@ -72,7 +72,7 @@
                 <div class="input-group datetimepicker" id="end_date" data-target-input="nearest">
                     <input type="text" name="end_date" class="form-control datetimepicker-input" data-target="#end_date" />
                     <div class="input-group-append" data-target="#end_date" data-toggle="datetimepicker">
-                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        <div class="input-group-text"><i class="fas fa-calendar"></i></div>
                     </div>
                 </div>
             </div>

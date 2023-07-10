@@ -20,7 +20,7 @@
             </div>
         </div>
         <div class="row justify-content-center">
-            <div class="col-lg-5">
+            <div class="col-lg-4">
                 <div class="form-group">
                     <label for="account">Nomor Rekening</label>
                     <input type="text" class="form-control @error('account') is-invalid @enderror" name="account" id="account" 
@@ -30,7 +30,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-lg-5">
+            <div class="col-lg-4">
                 <div class="form-group">
                     <label for="name">Nama</label>
                     <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="name" 
@@ -41,15 +41,16 @@
                 </div>
             </div>
         </div>
+
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input  @error('is_main') is-invalid @enderror" id="is_main" name="is_main"
-                        value="{{ old('is_main') ?? 1 }}"
+                    <input type="checkbox" class="custom-control-input @error('is_main') is-invalid @enderror" name="is_main" id="is_main" 
+                        value="{{ old('is_main') ?? 1 }}" 
                         {{ old('is_main') == 1 ? 'checked' : '' }}>
-                    <label class="custom-control-label" for="is_main">Akun utama?</label>
+                    <label class="custom-control-label" for="is_main">Akun Utama?</label>
                     @error('is_main')
-                    <span class="invalid-feedback">{{ $message }}</span>
+                        <span class="invalid-feedback">{{ $message }}</span>
                     @enderror
                 </div>
             </div>

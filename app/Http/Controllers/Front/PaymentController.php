@@ -91,7 +91,7 @@ class PaymentController extends Controller
             $data
         );
 
-        return back()
+        return redirect('/')
                 ->with([
                     'message' =>'Konfirmasi pembayaran berhasil disimpan',
                     'success' => true

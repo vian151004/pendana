@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\Models\Bank;
 use App\Models\User;
 use App\Models\Campaign;
 use App\Models\Category;
@@ -24,8 +25,9 @@ class DonationController extends Controller
                 });
             }
         )
+        ->where('status', 'publish')
         ->orderBy('publish_date', 'desc')
-        ->paginate(9)
+        ->paginate(6)
         ->withQueryString();
 
         return view('front.donation.index', compact('category', 'campaign'));
@@ -50,10 +52,12 @@ class DonationController extends Controller
 
     public function store(Request $request, $id) {
         $validated = Validator::make($request->all(), [
-            'nominal' => 'required|integer|min:500',
+            'nominal' => 'required|regex:/^[0-9.]+$/|min:4',
             'user_id' => 'required|exists:users,id',
             'anonim' => 'nullable|in:1,0',
             'support' => 'nullable',
+        ], [
+            'nominal.min' => 'Nominal minimal 1.000'
         ]);
 
         if ($validated->fails()) {
@@ -63,21 +67,22 @@ class DonationController extends Controller
         }
 
         $campaign = Campaign::findOrFail($id);
-
         $donation = Donation::create([
             'campaign_id' => $campaign->id,
-            'nominal' => $request->nominal,
+            'nominal' => str_replace('.', '', $request->nominal),
             'user_id' => $request->user_id,
-            'anonim' => $request->anonim,
+            'anonim' => $request->anonim ?? 0,
             'support' => $request->support,
             'order_number' => 'PX'. mt_rand(000000, 999999),
             'status' => 'not confirmed'
         ]);
 
+        $bank = Bank::all();
+
         return redirect('/donation/'. $campaign->id .'/payment/'. $donation->order_number)
-                ->with([
-                    'message' =>'Donasi baru berhasil disimpan',
-                    'success' => true
-                ]);
+            ->with([
+                'message' =>'Donasi baru berhasil disimpan',
+                'success' => true
+            ]);
     }
 }

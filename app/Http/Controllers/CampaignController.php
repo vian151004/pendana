@@ -48,12 +48,8 @@ class CampaignController extends Controller
             })
             ->editColumn('path_image', function ($query) {
                 return '
-                <iframe src=" ' . asset('storage'). $query->path_image  . ' "  width="80%" height="140px" frameborder="0"></iframe>
+                    <img src=" ' . asset('storage'). $query->path_image  . ' " class="img-thumbnail">
                 ';
-                // return '
-                //     <img src=" ' . 'storage'. $query->path_image  . ' " class="img-thumbnail">
-                // ';
-                // return '<img src="'. Storage::disk('public')->url($query->path_image) .'" class="img-thumbnail">';
             })
             ->editColumn('status', function ($query) {
                 return '<span class="badge badge-'. $query->statusColor() .'">'. $query->status .'</span>';
@@ -104,8 +100,8 @@ class CampaignController extends Controller
     {
         $rules = [
             'title' => 'required|min:8',
-            'categories' => 'required',
-            'short_description' => 'required',
+            'categories' => 'required|array',
+            'short_description' => 'required|max:1499',
             'body' => 'required|min:8',
             'publish_date' => 'required|date_format:Y-m-d H:i',
             'status' => 'required|in:publish,archived,pending',
@@ -122,6 +118,10 @@ class CampaignController extends Controller
 
         $validator = Validator::make($request->all(), $rules, [
             'goal.min' => 'Nominal minimal 100.000'
+        ]);
+
+        $validator = Validator::make($request->all(), $rules, [
+            'short_description.max' => 'Maksimal 1499 huruf'
         ]);
 
         if ($validator->fails()) {
@@ -178,8 +178,8 @@ class CampaignController extends Controller
     {
         $rules = [
             'title' => 'required|min:8',
-            'categories' => 'required',
-            'short_description' => 'required',
+            'categories' => 'required|array',
+            'short_description' => 'required|max:1499',
             'body' => 'required|min:8',
             'publish_date' => 'required|date_format:Y-m-d H:i',
             'status' => 'required|in:publish,archived,pending',
@@ -196,6 +196,10 @@ class CampaignController extends Controller
 
         $validator = Validator::make($request->all(), $rules, [
             'goal.min' => 'Nominal minimal 100.000'
+        ]);
+
+        $validator = Validator::make($request->all(), $rules, [
+            'short_description.max' => 'Maksimal 1499 huruf'
         ]);
 
         if ($validator->fails()) {

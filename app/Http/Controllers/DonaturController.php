@@ -18,8 +18,7 @@ class DonaturController extends Controller
     {
         return view('donatur.index');
     }
-
-    public function data()
+    public function data(Request $request)
     {
         $query = User::with('role')
             ->withCount('campaigns')
@@ -29,6 +28,9 @@ class DonaturController extends Controller
                 }
             ], 'nominal')
             ->donatur()
+            ->when($request->has('email') && $request->email != "", function ($query) use ($request) {
+                $query->where('email', $request->email);
+            })
             ->orderBy('name');
 
         return datatables($query)

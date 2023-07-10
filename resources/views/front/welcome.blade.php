@@ -57,6 +57,25 @@
                 min-height: 10rem;
             }
         }
+
+        .page-item .page-link {
+            background: transparent;
+            border-radius: .35rem;
+            border: none;
+            padding: .75rem 1rem;
+            font-weight: 700;
+            font-size: .9rem;
+            color: #454545;
+        }
+        .page-item.disabled .page-link {
+            background: transparent;
+        }
+        .page-item.active .page-link {
+            z-index: 3;
+            color: #ffffff;
+            background: var(--primary);
+            border-color: var(--primary);
+        }
     </style>
 @endpush
     
@@ -123,8 +142,8 @@
             @foreach ($campaign as $v)  
             <div class="col-lg-4 col-md-6">
                 <div class="card mt-4">
-                    <div class="rounded-top" style="height:250px; overflow: hidden;"> {{-- jika foto terlalu leabr ditambah overflow: hidden; --}}
-                        @if ( asset('storage'. ($v->path_image)) )
+                    <div class="rounded-top" style="height: 250px; overflow: hidden;"> {{-- jika foto terlalu leabr ditambah overflow: hidden; --}}
+                        @if (asset('storage'.( $v->path_image))) 
                         <img src="{{ asset('storage'.( $v->path_image)) }}" class="card-img-top" 
                             alt="...">
                         @else
@@ -142,9 +161,13 @@
                             <p class="mb-0">Goal: <strong>{{ format_uang($v->goal) }}</strong></p>
                         </div>
                     </div>
-                    <div class="card-body p-2 border-top">
-                        <h5 class="card-title text-bold">{{ $v->title }}</h5>
-                        <p class="card-text">{{ Str::limit($v->short_description, 100, ' ...') }}</p>
+                    <div class="card-body card-body2 p-2 border-top">
+                        <a href="{{ url('/donation/'. $v->id) }}" class="card-title text-bold text-dark mb-3">{{ $v->title }}</a>
+                        @if (Str::length($v->short_description) > 0)
+                            <p class="card-text">{{ Str::limit($v->short_description, 100, ' ...') }}</p>
+                        @else
+                            <p class="card-text">Deskripsi tidak tersedia.</p>
+                        @endif
                     </div>
                     <div class="card-footer p-2">
                         <a href="{{ url('/donation/'. $v->id) }}" class="btn btn-primary d-block rounded">
@@ -154,7 +177,16 @@
                     </div>
                 </div>
             </div>
-            @endforeach 
+            @endforeach
+        </div>
+    </div>
+    <div class="paginasi pb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 d-flex justify-content-center">
+                    <x-pagination-card :model="$campaign" />
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -169,7 +201,7 @@
                     Dari menolong anggota keluarga, hingga membangun jembatan di desa, <br>
                     ribuan orang telah menggunakan pendana untuk menggalang dana.
                 </h3>
-                <a href="{{ route('campaign.create') }}" class="brn btn-primary btn-lg rounded m-auto">Galang Dana Sekarang</a>
+                <a href="{{ route('campaign.create') }}" class="btn btn-primary btn-lg rounded m-auto">Galang Dana Sekarang</a>
             </div>
         </div>
     </div>
