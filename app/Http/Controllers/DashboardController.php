@@ -71,12 +71,13 @@ class DashboardController extends Controller
 
             //* range 1 hari
             $listNotifikasi = [
-                'donatur' => User::donatur()->get(), //whereDate('created_at', Date('Y-m-d'))
-                'subscriber' => Subscriber::get(), //whereDate('created_at', Date('Y-m-d'))
-                'contact' => Contact::get(), //whereDate('created_at', Date('Y-m-d'))
-                'donation' => Donation::get(), //where('status', 'not confirmed')->whereDate('created_at', Date('Y-m-d'))
-                'cashout' => Cashout::get() //where('status', 'pending')->whereDate('created_at', Date('Y-m-d'))
+                'donatur' => User::donatur()->whereDate('created_at', Date('Y-m-d'))->get(), //
+                'subscriber' => Subscriber::whereDate('created_at', Date('Y-m-d'))->get(), //
+                'contact' => Contact::whereDate('created_at', Date('Y-m-d'))->get(), //
+                'donation' => Donation::whereDate('created_at', Date('Y-m-d'))->get(), //where('status', 'not confirmed')->
+                'cashout' => Cashout::whereDate('created_at', Date('Y-m-d'))->get() //where('status', 'pending')->
             ];
+            
             $countNotifikasi = collect($listNotifikasi)->map(fn ($v) => $v->count())->sum();
 
             return view('dashboard', compact(
