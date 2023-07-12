@@ -7,8 +7,9 @@
     <div class="row justify-content-center">
         <div class="col-lg-10">
            <h5 class="text-center">Konfirmasi Pembayaran</h5>
-            <div class="detail text-center mt-3 mt-lg-4">
-                <p>ID Transkasi #{{ $donation->order_number }}</p>
+           <div class="detail text-center mt-3 mt-lg-4">
+                <p>ID Transaksi #{{ $donation->order_number }}</p>
+                <p class="badge badge-{{ $donation->statusColor() }}">{{ $donation->statusText() }}</p>
             </div>
 
             <form action="{{ url('/donation/'. $campaign->id .'/payment-confirmation/'. $donation->order_number) }}" method="POST" class="mt-3 mt-lg-4" enctype="multipart/form-data">
@@ -37,15 +38,25 @@
                 <div class="form-group">
                     <label for="bank_id">Bank <span class="text-danger">*</span></label>
                     <select name="bank_id" id="bank_id" class="form-control @error('bank_id') is-invalid @enderror">
-                        <option disabled selected>Pilih Bank</option>
+                        <option disabled selected>Pilih bank</option>
                         @foreach ($bank as $k => $v)
-                            <option value="{{ $k }}" {{ old('bank_id') == $k ? 'selected' : ($payment->bank_id == $k ? 'selected' : '') }}>{{ $v }}</option>
+                            <option value="{{ $k }}" {{ 
+                                old('bank_id') == $k 
+                                ? 'selected' 
+                                : ($payment->bank_id == $k 
+                                    ? 'selected' 
+                                    : ($mainAccount && $mainAccount->pivot && $mainAccount->pivot->bank_id == $k
+                                        ? 'selected'
+                                        : ''
+                                    )
+                                ) 
+                            }}>{{ $v }}</option>
                         @endforeach
                     </select>
                     @error('bank_id')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
                     @enderror
                 </div>
                 <div class="form-group">
@@ -63,7 +74,7 @@
                 </div>
                 {{-- <img src="" class="img-thumbnail preview-path_image w-50 mb-2" style="display: none;"> --}}
 
-                @if (asset('storage'. ($payment->path_image)))
+                @if ($payment->path_image)
                 <img src="{{ asset('storage'. ($payment->path_image)) }}" class="img-thumbnail preview-path_image w-50 mb-2">
                 @else
                 <img src="" class="img-thumbnail preview-path_image w-50 mb-2" style="display: none;">

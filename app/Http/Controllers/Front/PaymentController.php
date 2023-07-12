@@ -6,8 +6,10 @@ use App\Models\Bank;
 use App\Models\Payment;
 use App\Models\Campaign;
 use App\Models\Donation;
+use App\Mail\PaymentSuccess;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -90,6 +92,8 @@ class PaymentController extends Controller
             ['order_number' => $donation->order_number],
             $data
         );
+
+        Mail::to($donation->user)->send(new PaymentSuccess($donation));
 
         return redirect('/')
                 ->with([

@@ -1,6 +1,6 @@
 @extends('layouts.front')
 
-@section('title', $campaign->user->name)
+@section('title', $donation->user->name)
 
 @push('css')
     <style>

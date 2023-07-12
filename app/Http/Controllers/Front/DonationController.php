@@ -8,7 +8,9 @@ use App\Models\Campaign;
 use App\Models\Category;
 use App\Models\Donation;
 use Illuminate\Http\Request;
+use App\Mail\PaymentConfirmation;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class DonationController extends Controller
@@ -79,6 +81,8 @@ class DonationController extends Controller
 
         $bank = Bank::all();
 
+        Mail::to($donation->user)->send(new PaymentConfirmation($campaign, $donation, $bank));
+        
         return redirect('/donation/'. $campaign->id .'/payment/'. $donation->order_number)
             ->with([
                 'message' =>'Donasi baru berhasil disimpan',

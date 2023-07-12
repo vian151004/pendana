@@ -136,4 +136,10 @@ Route::group([
     });
 });
 
+Route::get('payment_confirmed', function () {
+    $donation = \App\Models\Donation::find(20);
 
+    return view('mail.payment_confirmed', compact('donation'));
+});
+
+Route::get('/user/{id}/{token}', [UserProfileInformationController::class, 'email_verification']);
