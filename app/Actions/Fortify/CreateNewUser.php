@@ -5,6 +5,7 @@ namespace App\Actions\Fortify;
 use App\Models\User;
 use Laravel\Jetstream\Jetstream;
 use App\Mail\RegistrationSuccess;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -38,7 +39,13 @@ class CreateNewUser implements CreatesNewUsers
 
             Mail::to($user)->send(new RegistrationSuccess($user));
 
-            return $user;
+            Auth::logout();
+
+            return redirect()->route('login');    
+                // ->with([
+                //     'message' => 'Registration successful! Please wait for email verification.',
+                //     'success' => true
+                // ])
         } catch (\Exception $e) {
             return $e;
         } 

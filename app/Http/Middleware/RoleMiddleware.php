@@ -18,7 +18,7 @@ class RoleMiddleware
     {
         $user = auth()->user();
         // dd($user->role);
-        
+        // $user->email_verified_at !== null &&
         if (in_array($user->role->name, $roles)) {
             return $next($request);
         }
