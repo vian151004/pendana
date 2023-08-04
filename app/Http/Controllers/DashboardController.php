@@ -9,6 +9,7 @@ use App\Models\Campaign;
 use App\Models\Category;
 use App\Models\Donation;
 use App\Models\Subscriber;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 
@@ -80,6 +81,8 @@ class DashboardController extends Controller
             
             $countNotifikasi = collect($listNotifikasi)->map(fn ($v) => $v->count())->sum();
 
+            $transactions = Transaction::with('donation.campaign')->latest()->get();
+           
             return view('dashboard', compact(
                 'jumlahKategori',
                 'jumlahProjek',
@@ -97,7 +100,8 @@ class DashboardController extends Controller
                 'listNamaUser',
                 'listJumlahUser',
                 'listNotifikasi',
-                'countNotifikasi'
+                'countNotifikasi',
+                'transactions'
             ));
         }
 

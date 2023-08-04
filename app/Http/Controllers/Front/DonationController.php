@@ -81,7 +81,7 @@ class DonationController extends Controller
 
         $bank = Bank::all();
 
-        Mail::to($donation->user)->send(new PaymentConfirmation($campaign, $donation, $bank));
+        // Mail::to($donation->user)->send(new PaymentConfirmation($campaign, $donation, $bank));
         
         return redirect('/donation/'. $campaign->id .'/payment/'. $donation->order_number)
             ->with([

@@ -102,7 +102,7 @@ class DonationController extends Controller
             $statusText = 'dibatalkan';
         }
         
-        Mail::to($donation->user)->send(new PaymentConfirmed($donation));
+        // Mail::to($donation->user)->send(new PaymentConfirmed($donation));
 
         return response()->json(['data' => $donation, 'message' => 'Donasi berhasil '. $statusText]);
     }

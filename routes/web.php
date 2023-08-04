@@ -20,8 +20,10 @@ use App\Http\Controllers\Front\{
     DonationController as FrontDonationController,
     FrontController,
     PaymentController,
+    TransactionController,
     SubscriberController as FrontSubscriberController
 };
+use App\Http\Controllers\Payment\TripayCallbackController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -56,10 +58,20 @@ Route::group([
     Route::get('/', [FrontDonationController::class, 'show']); //pakai camel case atau tanpa _
     Route::get('/create', [FrontDonationController::class, 'create']);
     Route::post('/', [FrontDonationController::class, 'store']);
+
+    Route::post('/transaction', [TransactionController::class, 'transaction_store'])
+        ->name('transaction.transaction_store');
+        
+    Route::get('/checkout', [PaymentController::class, 'checkout']);
     Route::get('/payment/{order_number}', [PaymentController::class, 'index']);
     Route::get('/payment-confirmation/{order_number}', [PaymentController::class, 'paymentConfirmation']);
     Route::post('/payment-confirmation/{order_number}', [PaymentController::class, 'store']);
 });
+
+Route::get('/donation/transaction/{reference}', [TransactionController::class, 'show'])
+        ->name('transaction.show');
+
+Route::post('/callback', [TripayCallbackController::class, 'handle']);
 
 Route::group([
     'middleware' => ['auth', 'role:admin,donatur'],

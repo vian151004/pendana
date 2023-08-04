@@ -147,3 +147,8 @@ function format_uang(input) {
     
     input.value = c;
 }
+
+function toggleDropdown() {
+    $('#dropdown-content').toggle();
+    $('.dropdown-toggle').toggleClass('open');
+}

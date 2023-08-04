@@ -28,14 +28,21 @@
                 <p>Total Tagihan <strong>Rp. {{ format_uang($donation->nominal) }}</strong></p>
             </div>
 
-            <div class="row justify-content-between mt-3 mt-lg-4">
-                @foreach ($bank as $v)
-                    <div class="col-lg-3 col-md-4 text-center">
-                        <img src="{{ asset($v->path_image) }}" alt="" class="w-100">
-                        <p class="mt-3 text-muted">{{ $v->code }}</p>
+            {{-- <div class="row justify-content-between mt-3 mt-lg-4">
+                @foreach ($channels as $channel)
+                    <div class="col-lg-3 col-md-4">
+                        <form action="{{ url('/donation/{id}/payment-confirmation/{order_number}') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="nominal" value="{{ $donation->nominal }}">
+                            <input type="hidden" name="method" value="{{ $channel->code }}">
+                            <button type="submit" class="text-center rounded">
+                                <img src="{{ asset('storage/bank/' . $channel->code . '.png') }}" alt="" class="w-100 rounded">
+                                <p class="mt-3 text-muted">Bayar dengan {{ $channel->name }}</p>
+                            </button>
+                        </form>
                     </div>
                 @endforeach
-            </div>
+            </div> --}}
 
             <p class="text-center mt-3 mt-lg-4">
                 Harap transfer sesuai dengan nominal "<strong>TOTAL TAGIHAN</strong>" ke bank yang tertera di atas!
@@ -43,7 +50,8 @@
             </p>
            
             <div class="text-center mt-3 mt-lg-4">
-                <a href="{{ url('/donation/'. $campaign->id .'/payment-confirmation/'. $donation->order_number) }}" class="btn btn-primary btn-lg">Konfirmasi Pembayaran</a>
+                <a href="{{ url('/donation/'. $campaign->id .'/payment-confirmation/'. $donation->order_number) }}" class="btn btn-primary btn-lg">Pembayaran Offline</a>
+                <a href="{{ url('/donation/'. $campaign->id .'/checkout') }}" class="btn btn-primary btn-lg">Pembayaran Online</a>
             </div>
 
             <div class="informasi d-flex justify-content-center align-items-center mt-3 mt-lg-4">

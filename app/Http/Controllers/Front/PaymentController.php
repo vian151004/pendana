@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\Http\Controllers\Payment\TripayController;
 use App\Models\Bank;
 use App\Models\Payment;
 use App\Models\Campaign;
@@ -93,12 +94,19 @@ class PaymentController extends Controller
             $data
         );
 
-        Mail::to($donation->user)->send(new PaymentSuccess($donation));
+        // Mail::to($donation->user)->send(new PaymentSuccess($donation));
 
         return redirect('/')
                 ->with([
                     'message' =>'Konfirmasi pembayaran berhasil disimpan',
                     'success' => true
                 ]);
+    }
+
+    public function checkout(Donation $donation) {
+        $tripay = new TripayController();
+        $channels = $tripay->getPaymentChannels();
+
+        return view('front.transaction.checkout', compact('donation', 'channels'));
     }
 }

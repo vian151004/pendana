@@ -167,10 +167,63 @@
         </div>
         <!-- /.card -->
     </section>
+
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header body-transparent">
+                <h3 class="card-title">
+                    <i class="fas fa-donate mr-1"></i>
+                    Transaksi Masuk
+                </h3>
+            </div>
+    
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table m-0">
+                        <thead>
+                            <tr>
+                                <th width="5%">#</th>
+                                <th width="25%">Nama</th>
+                                <th width="35%">Judul</th>
+                                <th>Jumlah Donasi</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($transactions as $k => $v)
+                            <tr>
+                                <td><a href="{{ route('transaction.show', $v->reference) }}">{{ $k+1 }}</a></td>
+                                <td>{{ $v->user->name }} <br> <a href="mailTo:{{ $v->email }}"
+                                    target="-blank">{{ $v->user->email }}</a></td>
+                                <td>{{ $v->donation->campaign->title }}</td> 
+                                <td>Rp. {{ format_uang($v->donation->nominal) }}</td>
+                                <td>
+                                    @if ($v->status == 'paid')
+                                    <span class="rounded-circle bg-success py-2 px-2 text-xs font-weight-bold text-uppercase">
+                                        {{ $v->status }}
+                                    </span>
+                                    @else
+                                    <span class="rounded-circle bg-danger py-2 px-2 text-xs font-weight-bold text-uppercase">
+                                        {{ $v->status }}
+                                    </span>    
+                                    @endif
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="4">Tidak Tersedia</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+        </div>
+    </div>
+
     <!-- /.Left col -->
     <div class="col-lg-7">
-
-
         <!-- TABLE: LATEST ORDERS -->
         <div class="card">
             <div class="card-header border-transparent">
@@ -309,9 +362,6 @@
                     @endforeach
                 </ul>
             </div>
-        </div>
-        </section>
-        <!-- right col -->
         </div>
     </section>
     <!-- right col -->
